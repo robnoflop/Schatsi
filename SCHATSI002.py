@@ -68,7 +68,6 @@ def duration_calc(timestamp1_normalized, timestamp2_normalized):
 
     return duration
 
-
 """
 Start of the program:
 1. First timestamp for the calculation of the runtime
@@ -125,15 +124,15 @@ for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
         # if it fails do:
         # if there is an exception or an error, they will be catched and the file wont be included in the next steps
         except:
-            if f.endswith(".pdf"):
+            if f.endswith(".pdf") or f.endswith(".PDF"):
                 datatype = "pdf"
-            elif f.endswith(".txt"):
+            elif f.endswith(".txt") or f.endswith(".TXT"):
                 datatype = "txt"
-            elif f.endswith(".csv"):
+            elif f.endswith(".csv") or f.endswith(".CSV"):
                 datatype = "csv"
-            elif f.endswith(".docx"):
+            elif f.endswith(".docx") or f.endswith(".DOCX"):
                 datatype = "docx"
-            elif f.endswith(".odt"):
+            elif f.endswith(".odt") or f.endswith(".ODT"):
                 datatype = "odt"
             else:
                 datatype = "unknown datatype"
@@ -141,15 +140,15 @@ for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
 
         # if it succeeds do:
         else:
-            if f.endswith(".pdf"):
+            if f.endswith(".pdf") or f.endswith(".PDF"):
                 datatype = "pdf"
-            elif f.endswith(".txt"):
+            elif f.endswith(".txt") or f.endswith(".TXT"):
                 datatype = "txt"
-            elif f.endswith(".csv"):
+            elif f.endswith(".csv") or f.endswith(".CSV"):
                 datatype = "csv"
-            elif f.endswith(".docx"):
+            elif f.endswith(".docx") or f.endswith(".DOCX"):
                 datatype = "docx"
-            elif f.endswith(".odt"):
+            elif f.endswith(".odt") or f.endswith(".ODT"):
                 datatype = "odt"
             else:
                 datatype = "unknown datatype"
@@ -179,4 +178,3 @@ duration_program = duration_calc(start_normalized, finish_normalized)
 # write start_normalized, finish_normalized and duration into "SCHATSI_runtime.csv"
 zeile_runtime = [start_normalized, finish_normalized, duration_program]
 runtime_file.writerow(zeile_runtime)
-
