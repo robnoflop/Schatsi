@@ -2,7 +2,7 @@ import os
 import csv
 import pdftotext
 import time
-
+from SCHATSI003 import string_preparation, count_words
 
 # Function to normalize the date and time, which is created by using the python module "time", according to the
 # description in the Feature "SCHATSI002"
@@ -99,6 +99,13 @@ file = csv.writer(output, delimiter=';', quoting=csv.QUOTE_MINIMAL)
 kopfzeile = ["filename", "type", "included", "excluded"]
 file.writerow(kopfzeile)
 
+"""
+preparation of data_cleansing.csv 
+"""
+data_cleansing = open('SCHATSI_data_cleansing.csv', 'w', newline='')
+data_cleansing_file = csv.writer(data_cleansing, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+kopfzeile_data_cleansing = ["filename", "type", "Total Count"]
+data_cleansing_file.writerow(kopfzeile_data_cleansing)
 
 # For all paths, subdirectories and files in the input-folder do:
 # local path for testing: "r'/home/h/Github/Testpdfs'"
@@ -142,6 +149,12 @@ for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
         else:
             if f.endswith(".pdf") or f.endswith(".PDF"):
                 datatype = "pdf"
+                # All files that are successfully read in where the type is 'pdf' will be used in the next steps
+                text_only, references = string_preparation(text)
+                total_num_words = count_words(text_only)
+                zeile_data_cleansing = [filename, datatype, total_num_words]
+                data_cleansing_file.writerow(zeile_data_cleansing)
+                
             elif f.endswith(".txt") or f.endswith(".TXT"):
                 datatype = "txt"
             elif f.endswith(".csv") or f.endswith(".CSV"):
