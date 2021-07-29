@@ -17,3 +17,4 @@ We have chosen the Python library "pdftotext" for extracting the text from PDF's
 - The library allows to keep text and page structuring when outputting as string which might be useful in the future
 - It also recognizes text on figures, diagrams and in tables, which increases the correctness of predictions for publications with a high proportion of these elements
 - The library is compact and therefore easy to use
+![image2](pdftotext_example.png)
