@@ -1,8 +1,12 @@
+# SCHATSI002: Frame around the whole Application
+
 import os
 import csv
 import pdftotext
 import time
-from SCHATSI003 import string_preparation, count_words
+import SCHATSI003 #import string_preparation, count_words, references, reference_data_cutting
+
+
 
 # Function to normalize the date and time, which is created by using the python module "time", according to the
 # description in the Feature "SCHATSI002"
@@ -65,8 +69,8 @@ def duration_calc(timestamp1_normalized, timestamp2_normalized):
     duration = (finish_hour - start_hour)*60 + (finish_minute - start_minute)
     if (finish_second - start_second) >= 30:
         duration = duration + 1
-
     return duration
+
 
 """
 Start of the program:
@@ -107,6 +111,16 @@ data_cleansing_file = csv.writer(data_cleansing, delimiter=';', quoting=csv.QUOT
 kopfzeile_data_cleansing = ["filename", "type", "Total Count"]
 data_cleansing_file.writerow(kopfzeile_data_cleansing)
 
+
+"""
+preparation of schatsi_references.csv
+"""
+refs = open('SCHATSI_references.csv', 'w', newline='')
+refs_file = csv.writer(refs, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+kopfzeile_refs = ["filename", "reference_author", "reference_year", "reference_title"]
+refs_file.writerow(kopfzeile_refs)
+
+
 # For all paths, subdirectories and files in the input-folder do:
 # local path for testing: "r'/home/h/Github/Testpdfs'"
 for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
@@ -127,7 +141,7 @@ for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
                 # force python to turn the byte stream into a string
                 text = "\n\n".join(pdf)
                 # print the text into a terminal for testing
-                print(text)
+                # print(text)
         # if it fails do:
         # if there is an exception or an error, they will be catched and the file wont be included in the next steps
         except:
@@ -150,11 +164,19 @@ for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
             if f.endswith(".pdf") or f.endswith(".PDF"):
                 datatype = "pdf"
                 # All files that are successfully read in where the type is 'pdf' will be used in the next steps
-                text_only, references = string_preparation(text)
-                total_num_words = count_words(text_only)
+                text_only, references = SCHATSI003.string_preparation(text)
+                total_num_words = SCHATSI003.count_words(text_only)
                 zeile_data_cleansing = [filename, datatype, total_num_words]
                 data_cleansing_file.writerow(zeile_data_cleansing)
-                
+                #print(references)
+                print("###################################################################")
+
+                reference_list = SCHATSI003.references(references)
+                for element in reference_list:
+                    author, year, title = SCHATSI003.reference_data_cutting(element)
+                    refs_zeile = [filename, author, year, title]
+                    refs_file.writerow(refs_zeile)
+
             elif f.endswith(".txt") or f.endswith(".TXT"):
                 datatype = "txt"
             elif f.endswith(".csv") or f.endswith(".CSV"):
@@ -165,6 +187,7 @@ for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
                 datatype = "odt"
             else:
                 datatype = "unknown datatype"
+
             zeile = [f, datatype, "X", "__"]
 
         file.writerow(zeile)
