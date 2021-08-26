@@ -4,8 +4,8 @@ import os
 import csv
 import pdftotext
 import time
-
 import SCHATSI003 #import string_preparation, count_words, references, reference_data_cutting
+
 
 
 # Function to normalize the date and time, which is created by using the python module "time", according to the
@@ -98,6 +98,7 @@ output = open("SCHATSI_included.csv", 'w', newline='')
 # output = open("/data/output/SCHATSI_included.csv", 'w', newline='')
 # create a writer object, which is used to write the lines into the csv
 file = csv.writer(output, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+
 # onetime writing of a headline into the csv
 kopfzeile = ["filename", "type", "included", "excluded"]
 file.writerow(kopfzeile)
