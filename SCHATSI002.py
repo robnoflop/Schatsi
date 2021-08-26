@@ -81,7 +81,7 @@ Start of the program:
 """
 # Runtime
 # open file for runtime
-runtime = open("SCHATSI_runtime.csv", 'w', newline='')
+runtime = open("/data/output/SCHATSI_runtime.csv", 'w', newline='')
 runtime_file = csv.writer(runtime, delimiter=';', quoting=csv.QUOTE_MINIMAL)
 # writing a headline into the file
 kopfzeile_runtime = ["start processing", "end processing", "duration (minutes)"]
@@ -94,8 +94,8 @@ start_normalized = time_analysis(start)
 
 # At first: open the Output-File --> "SCHATSI_included.csv"
 # local path for testing: "SCHATSI_included.csv"
-output = open("SCHATSI_included.csv", 'w', newline='')
-# output = open("/data/output/SCHATSI_included.csv", 'w', newline='')
+#output = open("SCHATSI_included.csv", 'w', newline='')
+output = open("/data/output/SCHATSI_included.csv", 'w', newline='')
 # create a writer object, which is used to write the lines into the csv
 file = csv.writer(output, delimiter=';', quoting=csv.QUOTE_MINIMAL)
 
@@ -106,7 +106,7 @@ file.writerow(kopfzeile)
 """
 preparation of data_cleansing.csv 
 """
-data_cleansing = open('SCHATSI_data_cleansing.csv', 'w', newline='')
+data_cleansing = open("/data/output/SCHATSI_data_cleansing.csv", 'w', newline='')
 data_cleansing_file = csv.writer(data_cleansing, delimiter=';', quoting=csv.QUOTE_MINIMAL)
 kopfzeile_data_cleansing = ["filename", "type", "Total Count"]
 data_cleansing_file.writerow(kopfzeile_data_cleansing)
@@ -115,7 +115,7 @@ data_cleansing_file.writerow(kopfzeile_data_cleansing)
 """
 preparation of schatsi_references.csv
 """
-refs = open('SCHATSI_references.csv', 'w', newline='')
+refs = open("/data/output/SCHATSI_references.csv", 'w', newline='')
 refs_file = csv.writer(refs, delimiter=';', quoting=csv.QUOTE_MINIMAL)
 kopfzeile_refs = ["filename", "reference_author", "reference_year", "reference_title"]
 refs_file.writerow(kopfzeile_refs)
@@ -123,8 +123,8 @@ refs_file.writerow(kopfzeile_refs)
 
 # For all paths, subdirectories and files in the input-folder do:
 # local path for testing: "r'/home/h/Github/Testpdfs'"
-for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
-# for path, subdirs, files in os.walk(r'/data/input'):
+#for path, subdirs, files in os.walk(r'/home/h/Github/Testpdfs'):
+for path, subdirs, files in os.walk(r'/data/input'):
     for filename in files:
 
         # with data path
