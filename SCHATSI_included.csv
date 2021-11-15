@@ -1,6 +1,7 @@
 filename;type;included;excluded
 A-NETW~1.PDF;pdf;X;__
 Driver-Persistence-Safety-and-Older-Adult-Selfefficacy-Addressing-Driving-Challenges-Using-Innovative-Multimodal-Communication-ConceptsAdvances-in-Intelligent-Systems-and-Computing.pdf;pdf;X;__
+SCHATSI_stopwords.csv;csv;__;X
 LOOK-O~1.PDF;pdf;X;__
 Combined-multivariate-analysis-and-machine-learning-reveals-a-predictive-module-of-metabolic-stress-response-in-Arabidopsis-thalianaMolecular-Omics.pdf;pdf;X;__
 THE-UN~1.PDF;pdf;X;__

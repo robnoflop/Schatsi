@@ -110,7 +110,7 @@ def reference_data_cutting(input_text):
     elif str(reference_year) in reference_title:
         reference_title = reference_title[:reference_title.find(reference_year)]
 
-    print("REFERENCE AUTHOR: " + reference_author + " REFERENCE YEAR: " + reference_year + " REFERENCE TITLE: " + reference_title)
+    #print("REFERENCE AUTHOR: " + reference_author + " REFERENCE YEAR: " + reference_year + " REFERENCE TITLE: " + reference_title)
     return reference_author, reference_year, reference_title
 
 def references(input_text):

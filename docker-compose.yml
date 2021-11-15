@@ -1,7 +1,7 @@
 version: "3"
 services:
   test:
-    image: hlast96/schatsi:210826
+    image: hlast96/schatsi:211115
     volumes:
       #- /home/h/Github/Testpdfs:/data/input
       #- /home/h/schatsi_docker:/data/output
