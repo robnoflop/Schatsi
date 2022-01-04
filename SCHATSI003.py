@@ -26,7 +26,6 @@ def string_preparation(input_text):
     except:
         # If the string didnt contain the word "reference", which means that there arent any references (for example
         # when the pdf is just an abstract) the whole document is used as text and the reference string is empty
-
         low_string_without_references = low_string
         references = ""
     else:
@@ -55,6 +54,8 @@ def count_words(input_text):
 """SCHATSI003.2: Extract the Metadata from the Paper
 
 """
+
+
 def metadata_author(input_text):
     pass
 
@@ -110,8 +111,10 @@ def reference_data_cutting(input_text):
     elif str(reference_year) in reference_title:
         reference_title = reference_title[:reference_title.find(reference_year)]
 
-    #print("REFERENCE AUTHOR: " + reference_author + " REFERENCE YEAR: " + reference_year + " REFERENCE TITLE: " + reference_title)
+    # print("REFERENCE AUTHOR: " + reference_author + " REFERENCE YEAR: " + reference_year + " REFERENCE TITLE: "
+    # + reference_title)
     return reference_author, reference_year, reference_title
+
 
 def references(input_text):
     ref_list = []
@@ -182,7 +185,4 @@ def references(input_text):
                 ref = ref.replace(seperator, "", 1)
                 ref_list.append(ref)
 
-
         return ref_list
-
-
