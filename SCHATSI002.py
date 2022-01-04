@@ -5,7 +5,7 @@ import csv
 import pdftotext
 import time
 import SCHATSI003  # import string_preparation, count_words, references, reference_data_cutting
-import SCHATSI004  # import terms, bigrams, trigrams, term_filtering,....
+import SCHATSI004  # import terms, bigrams, trigrams, term_filtering, ranking,...
 
 
 # Function to normalize the date and time, which is created by using the python module "time", according to the
@@ -46,6 +46,7 @@ def time_analysis(timestamp):
     second = timestamp[17:19]
     # normalized String: DD.MM.YYYY HH:MM:SS
     time_string = day + "." + month + "." + year + " " + hour + ":" + minute + ":" + second
+    print("Timestring: " + time_string + "\n")
     return time_string
 
 
@@ -60,10 +61,10 @@ def duration_calc(timestamp1_normalized, timestamp2_normalized):
 
     start_hour = int(start_time[0:2])
     finish_hour = int(finish_time[0:2])
-    start_minute = int(start_time[4:6])
-    finish_minute = int(finish_time[4:6])
-    start_second = int(start_time[7:9])
-    finish_second = int(finish_time[7:9])
+    start_minute = int(start_time[3:5])
+    finish_minute = int(finish_time[3:5])
+    start_second = int(start_time[6:8])
+    finish_second = int(finish_time[6:8])
 
     # hour -> 60 minutes + minutes + 1 minute, if there are more than 30 seconds left
     duration = (finish_hour - start_hour)*60 + (finish_minute - start_minute)
@@ -154,14 +155,13 @@ with open(r'/data/input/SCHATSI_stopwords.csv') as stop:
         stopwords_list.append(row[0])
 stopwords = set(stopwords_list)
 
-
 # For all paths, subdirectories and files in the input-folder do:
 # LOCAL PATH FOR TESTING: "r'/home/h/Github/Testpdfs'"
 # for path, subdirs, files in os.walk(r'/home/h/Downloads/Testpdfs'):
 # PATH FOR DOCKER:
 for path, subdirs, files in os.walk(r'/data/input'):
     for filename in files:
-
+        # print(filename)
         # with data path
         g = os.path.join(path, filename)
 
@@ -254,9 +254,11 @@ for path, subdirs, files in os.walk(r'/data/input'):
         ...
         """
 
+# Call the Ranking function from SCHATSI004.002
+SCHATSI004.ranking()
+
 
 # Calculate the runtime -> last step of the programm
-
 # second timestamp
 finish = time.asctime()
 finish_normalized = time_analysis(finish)
