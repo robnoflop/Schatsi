@@ -6,7 +6,7 @@ This project is located at the Chair of Service Operation at the University of R
 In addition to the analysis, the results will be provided not only in tabular form, but additionally in a graphical overview to be able to penetrate the relationships between the papers and their authors.
 For this purpose, techniques of text analysis, natural language processing (NLP) and machine learning (ML) are used.
 
-Currently, SCHA.T.S.I can be used on Windows and Linux. A version for MacOS is in the making :-)
+Currently, SCHA.T.S.I can be used on Windows and Linux and with Release 1.3 a Beta version for MacOS accessible (No Guarrentee - Feedback is Welcome) :-)
 
 ---
 
@@ -15,7 +15,7 @@ Dieses Projekt ist am Lehrstuhl Service Operation an der Universität Rostock an
 Neben der Analyse sollen die Ergebnisse nicht nur in tabellarischer Form, sondern zusätzlich in einer grafischen Übersicht bereitgestellt werden, um die Zusammenhänge zwischen den Papern und ihren Autoren durchdringen zu können.
 Dazu werden Techniken der Textanalyse, der Verarbeitung natürlicher Sprache (NLP) und des Maschinellen Lernens (ML) eingesetzt.
 
-Aktuell kann SCHA.T.S.I auf Windows und Linux genutzt werden. Eine Version für MacOS ist in Arbeit :-) 
+Aktuell kann SCHA.T.S.I auf Windows und Linux genutzt werden, des Weiteren ist eine Beta Version für MacOS ab Release 1.3 verfügbar (Keine Garantien - Feedback erwünscht) :-) 
 
 ## How to run SCHATSI
 
