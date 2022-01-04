@@ -221,8 +221,8 @@ def ranking():
 
     # write the ordered result into a csv-file called "SCHATSI_ranking.csv"
     # LOCAL PATH
-    merged_df.to_csv('SCHATSI_ranking.csv', sep=';')
+    # merged_df.to_csv('SCHATSI_ranking.csv', sep=';')
     # DOCKER PATH
-    # merged_df.to_csv("/data/output/SCHATSI_ranking.csv", sep=';')
+    merged_df.to_csv("/data/output/SCHATSI_ranking.csv", sep=';')
 
     return()
