@@ -198,9 +198,9 @@ for path, subdirs, files in os.walk(r'/home/h/Downloads/Testpdfs'):
         file_counter = file_counter + 1
 
 # LOCAL PATH
-included_df.to_csv('SCHATSI_included.csv', sep=';', index=False)
+# included_df.to_csv('SCHATSI_included.csv', sep=';', index=False)
 # DOCKER PATH
-# included_df.to_csv(r'/data/output/SCHATSI_included.csv', sep=';', index=False)
+included_df.to_csv(r'/data/output/SCHATSI_included.csv', sep=';', index=False)
 
 # Second timestamp for SCHATSI_included: append an entry at the runtime dataframe
 finish_included = time.asctime()
@@ -226,9 +226,9 @@ for row in text_df.itertuples(index=True):
     datacleansing_df = datacleansing_df.append(zeile_data_cleansing, ignore_index=True)
 
 # LOCAL PATH
-datacleansing_df.to_csv('SCHATSI_data_cleansing.csv', sep=';', index=False)
+# datacleansing_df.to_csv('SCHATSI_data_cleansing.csv', sep=';', index=False)
 # DOCKER PATH
-# datacleansing_df.to_csv(r'/data/output/SCHATSI_data_cleansing.csv', sep=';', index=False)
+datacleansing_df.to_csv(r'/data/output/SCHATSI_data_cleansing.csv', sep=';', index=False)
 
 # second timestamp for SCHATSI_data_cleansing; appending an entry to the runtime dataframe
 finish_datacleansing = time.asctime()
@@ -275,9 +275,9 @@ for row in text_df.itertuples(index=True):
         pandas.DataFrame(term_list, columns=['filename', 'term', 'term count']), ignore_index=True)
 
 # LOCAL PATH
-terms_df.to_csv('SCHATSI_terms.csv', sep=';', index=False)
+# terms_df.to_csv('SCHATSI_terms.csv', sep=';', index=False)
 # DOCKER PATH
-# terms_df.to_csv(r'/data/output/SCHATSI_terms.csv', sep=';', index=False)
+terms_df.to_csv(r'/data/output/SCHATSI_terms.csv', sep=';', index=False)
 
 # Second timestamp of SCHATSI_terms; appending an entry to runtime_df
 finish_terms = time.asctime()
@@ -308,9 +308,9 @@ for row in text_df.itertuples(index=True):
         pandas.DataFrame(refs_raw_zeile, columns=['filename', 'raw reference string']), ignore_index=True)
 
 # LOCAL PATH
-rawreferences_df.to_csv('SCHATSI_references_raw.csv', sep=';', index=False)
+# rawreferences_df.to_csv('SCHATSI_references_raw.csv', sep=';', index=False)
 # DOCKER PATH
-# rawreferences_df.to_csv(r'/data/output/SCHATSI_references_raw.csv', sep=';', index=False)
+rawreferences_df.to_csv(r'/data/output/SCHATSI_references_raw.csv', sep=';', index=False)
 
 # second timestamp for SCHATSI_references; appending an entry to runtime dataframe
 finish_references = time.asctime()
@@ -351,6 +351,6 @@ runtime_df = runtime_df.append(
 
 # write the runtime dataframe into a csv-File
 # LOCAL PATH
-runtime_df.to_csv('SCHATSI_runtime.csv', sep=';', index=False)
+# runtime_df.to_csv('SCHATSI_runtime.csv', sep=';', index=False)
 # DOCKER PATH
-# merged_df.to_csv('/data/output/SCHATSI_ranking.csv', sep=';', index=False)
+merged_df.to_csv('/data/output/SCHATSI_ranking.csv', sep=';', index=False)
