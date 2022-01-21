@@ -117,6 +117,7 @@ def reference_data_cutting(input_text):
 
 
 def references(input_text):
+
     ref_list = []
     number = 1
 
@@ -143,7 +144,6 @@ def references(input_text):
             seperator = "\n"
             next_sep = "\n"
             style = 3
-
         # Textpreparation: Cutting of all things before the first appearence of the seperator
         first_appearence_sep = input_text.find(seperator)
         pure_references = input_text[first_appearence_sep:]
@@ -168,6 +168,7 @@ def references(input_text):
                     ref = pure_references[pure_references.find(seperator):pure_references.find(next_sep)]
                     pure_references = pure_references[pure_references.find(next_sep):]
                     ref = ref.replace(seperator, "", 1)
+                    #print(ref)
                     ref_list.append(ref)
 
                     number = number + 1
@@ -175,14 +176,26 @@ def references(input_text):
                 else:
                     ref = pure_references[pure_references.find(seperator):]
                     ref = ref.replace(seperator, "", 1)
+                    #print(ref)
                     ref_list.append(ref)
                     number = number + 1
         # For style 3, which dont use numbers
         else:
+            #print("\nStyle 3 Condition arrived\n")
+            n = 0
             while len(pure_references) > 1:
-                ref = pure_references[pure_references.find(seperator):pure_references.find(next_sep)]
+                sep1 = pure_references.find(seperator)
+                sep2 = pure_references.find(seperator, sep1+1)
+                ref = pure_references[sep1:sep2]
+
+                #print("seperator position: ", sep1)
+                #print("next sep. position: ", sep2)
+                #print("\"", ref, "\"\n")
+
+                n = n+1
                 pure_references = pure_references.replace(ref, "", 1)
                 ref = ref.replace(seperator, "", 1)
+
                 ref_list.append(ref)
 
         return ref_list
