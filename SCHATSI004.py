@@ -53,6 +53,7 @@ def terms(text):
     special_chars = [' ', '\n', '\t', '.', ',', '?', '!', '%', '&', '/', '(', ')', '[', ']', '{', '}', '=', '§', '$',
                      '€', ":", ";", "|", "@", "+", "-", "*", "~", "#", "'", "_", ">", "<", "`", "´", "\"", "\'", "/"]
 
+    # append characters to a word, until a space or a spacial char is detected -> end of the term
     while i < len(text)-1:
         if text[i] not in special_chars:
             word = word + text[i]
@@ -77,6 +78,8 @@ def terms(text):
 def bigrams(term_list):
     bigram = []
     bigram_list = []
+
+    # taking two terms, write them into a list called bigram and write this into bigram_list; iterate over term_list
     for i in range(0, len(term_list)-1):
         bigram.append(term_list[i])
         bigram.append(term_list[i+1])
@@ -89,6 +92,7 @@ def trigrams(term_list):
     trigram = []
     trigram_list = []
 
+    # taking 3 terms, write them into a list called trigram, write it into trigram_list; iterate over term_list til end
     for i in range(0, len(term_list)-2):
         trigram.append(term_list[i])
         trigram.append(term_list[i+1])
@@ -102,10 +106,12 @@ def term_filtering(term_list, stopwords):
     # remove duplicates and filter for unuseful words
     term_list_filtered = []
     term_count_filtered = []
+
+    # if element is not already in list and is not a stopword -> write the term into a filtered list
     for element in term_list:
         if element not in term_list_filtered and element not in stopwords:
             term_list_filtered.append(element)
-
+    # every time a term in the list is found increase the counter +1, in the end the total number is found
     for element in term_list_filtered:
         counter = 0
         for term in term_list:
@@ -113,20 +119,25 @@ def term_filtering(term_list, stopwords):
                 counter = counter + 1
         term_count_filtered.append(counter)
 
+    # returning the list with the filtered single-word expressions and a list with the total number of each word
     return term_list_filtered, term_count_filtered
 
 
 def bigram_filtering(bigram_list, stopwords):
     bigram_list_filtered = []
     bigram_count_filtered = []
+
+    # filter for duplicates
     for element in bigram_list:
         if element in bigram_list_filtered:
             continue
         elif element[0] in stopwords or element[1] in stopwords:
+            # filter for unuseful expression like "of the", "water is", "the road"...
             continue
         else:
             bigram_list_filtered.append(element)
 
+    # count the total number of each term
     for element in bigram_list_filtered:
         counter = 0
         for bigram in bigram_list:
@@ -134,20 +145,24 @@ def bigram_filtering(bigram_list, stopwords):
                 counter = counter + 1
         bigram_count_filtered.append(counter)
 
+    # returning the list with the filtered bigram expressions and a list with the total number of each expression
     return bigram_list_filtered, bigram_count_filtered
 
 
 def trigram_filtering(trigram_list, stopwords):
     trigram_list_filtered = []
     trigram_count_filtered = []
+    # filter for duplicates
     for element in trigram_list:
         if element in trigram_list_filtered:
             continue
         elif element[0] not in stopwords and element[1] in stopwords and element[2] not in stopwords:
+            # filter for unuseful expressions like: "in the end", "trust is the",....
             trigram_list_filtered.append(element)
         else:
             continue
 
+    # count total number of each trigram expression
     for element in trigram_list_filtered:
         counter = 0
         for trigram in trigram_list:
@@ -155,6 +170,7 @@ def trigram_filtering(trigram_list, stopwords):
                 counter = counter + 1
         trigram_count_filtered.append(counter)
 
+    # returning the list with the filtered trigram expressions and a list with the total number of each word
     return trigram_list_filtered, trigram_count_filtered
 
 
@@ -221,8 +237,8 @@ def ranking():
 
     # write the ordered result into a csv-file called "SCHATSI_ranking.csv"
     # LOCAL PATH
-    merged_df.to_csv('SCHATSI_ranking.csv', sep=';')
+    merged_df.to_csv('SCHATSI_ranking.csv', sep=';', index=False)
     # DOCKER PATH
-    # merged_df.to_csv("/data/output/SCHATSI_ranking.csv", sep=';')
+    # merged_df.to_csv("/data/output/SCHATSI_ranking.csv", sep=';', index=False)
 
     return()
