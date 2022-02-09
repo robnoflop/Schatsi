@@ -41,7 +41,7 @@ NOTE: The first 5 coloums are from SCHATSI_datacleansing.csv (1-4) and from SCHA
 the frequency of a term is counted and a line is written in the file "SCHATSI_terms.csv"
 """
 
-import pandas
+import pandas as pd
 
 
 def terms(text):
@@ -174,28 +174,28 @@ def trigram_filtering(trigram_list, stopwords):
     return trigram_list_filtered, trigram_count_filtered
 
 
-def ranking():
+def ranking(functional_terms_input, terms_input):
     # local path
-    functional_terms_input = pandas.read_csv('SCHATSI_functional_terms.csv', sep=';')
-    terms_input = pandas.read_csv('SCHATSI_terms.csv', sep=';')
 
     # docker path
     # functional_terms_input = pandas.read_csv('/data/input/SCHATSI_functional_terms.csv', sep=';')
     # terms_input = pandas.read_csv('/data/output/SCHATSI_terms.csv', sep=';')
 
     # a list with all functional terms, which will be used later for the ranking
-    func = []
-    for index, row in functional_terms_input.iterrows():
-        func.append(row['term'])
+    # func = []
+    # for index, row in functional_terms_input.iterrows():
+    #     func.append(row['term'])
 
-    # finding all entries with a functional word as a term in "SCHATSI_terms.csv"
-    # And write them in the Pandas Dataframe "terms_df"
-    terms_df = pandas.DataFrame()
-    for element in func:
-        query_search = 'term == \"' + element + "\""
-        term_found = terms_input.query(query_search)
-        terms_df = terms_df.append(term_found, ignore_index=True)
-        pass
+    # # finding all entries with a functional word as a term in "SCHATSI_terms.csv"
+    # # And write them in the Pandas Dataframe "terms_df"
+    # terms = []
+    # for element in func:
+    #     query_search = 'term == \"' + element + "\""
+    #     term_found = terms_input.query(query_search)
+    #     terms.append(term_found.values.tolist())
+    #     pass
+    # terms_df = pd.DataFrame(terms, columns=terms_input.columns)
+    terms_df = functional_terms_input.join(terms_input.set_index('term'), on='term', how='inner')
 
     # preparation for building global sum of filtered words from "SCHATSI_terms.csv", for every file in the csv-file
     term_filenames_column = terms_input['filename']
@@ -205,13 +205,14 @@ def ranking():
         filename_list.append(value)
 
     # global sum of FILTERED WORDS from SCHATSI_terms.csv
-    global_sum_df = pandas.DataFrame(columns=['filename', 'sum_terms'])
+    global_sum = []
     # sum of FOUND FUNCTIONAL TERMS in SCHATSI_terms.csv
-    sum_found_func_terms_df = pandas.DataFrame(columns=['filename', 'sum_functional_terms'])
+    sum_found_func_terms = []
     for element in filename_list:
-        global_sum_df = global_sum_df.append({'filename': element, 'sum_terms': 0}, ignore_index=True)
-        sum_found_func_terms_df = sum_found_func_terms_df.append({'filename': element, 'sum_functional_terms': 0},
-                                                                 ignore_index=True)
+        global_sum.append([element, 0])
+        sum_found_func_terms.append([element, 0])
+    global_sum_df = pd.DataFrame(global_sum, columns=['filename', 'sum_terms'])
+    sum_found_func_terms_df = pd.DataFrame(sum_found_func_terms, columns=['filename', 'sum_functional_terms'])
 
     # fill Dataframe for global sum of filtered words for every file in "SCHATSI_terms.csv"
     for index, row in terms_input.iterrows():
@@ -237,8 +238,7 @@ def ranking():
 
     # write the ordered result into a csv-file called "SCHATSI_ranking.csv"
     # LOCAL PATH
-    merged_df.to_csv('SCHATSI_ranking.csv', sep=';', index=False)
-    # DOCKER PATH
-    # merged_df.to_csv("/data/output/SCHATSI_ranking.csv", sep=';', index=False)
 
-    return()
+    # merged_df.to_csv('SCHATSI_ranking.csv', sep=';')
+    # DOCKER PATH
+    return merged_df
