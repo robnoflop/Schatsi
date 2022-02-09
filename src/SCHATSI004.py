@@ -238,6 +238,13 @@ def ranking(functional_terms_input, terms_input):
 
     # write the ordered result into a csv-file called "SCHATSI_ranking.csv"
     # LOCAL PATH
+<<<<<<< HEAD:src/SCHATSI004.py
+=======
+
+    # merged_df.to_csv('SCHATSI_ranking.csv', sep=';')
+    # DOCKER PATH
+    merged_df.to_csv("/data/output/SCHATSI_ranking.csv", sep=';')
+>>>>>>> 46f4083626136cb8fa27f0189740f592b0b40605:SCHATSI004.py
 
     # merged_df.to_csv('SCHATSI_ranking.csv', sep=';')
     # DOCKER PATH
