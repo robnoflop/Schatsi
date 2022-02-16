@@ -55,7 +55,11 @@ def main():
         for row in csv_reader_object:
             stopwords_list.append(row[0])
     stopwords = set(stopwords_list)
-    functional_terms = pd.read_csv(SCHATSI_FUNCTIONAL_TERMS, sep=';')
+
+    try:
+        functional_terms = pd.read_csv(SCHATSI_FUNCTIONAL_TERMS, sep=';')
+    except:
+        pass
 
     print("done")
     print("Processing files for run:")
@@ -192,8 +196,12 @@ def main():
     start = datetime.now()
 
     terms_df = pd.DataFrame(output_terms, columns=["filename", "term", "term count"])
-    ranking_df = SCHATSI004.ranking(functional_terms, terms_df)
 
+    try:
+        ranking_df = SCHATSI004.ranking(functional_terms, terms_df)
+    except:
+        ranking_df = pd.DataFrame(columns=["X","filename","sum_functional_terms","sum_terms","result"])
+		
     finish = datetime.now()
     duration_program = (finish - start).seconds / 60
     runtime.append(['SCHATSI_ranking', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
