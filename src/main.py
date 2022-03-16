@@ -25,11 +25,11 @@ def main():
     # LOCAL PATH FOR TESTING:
     # runtime = open("SCHATSI_runtime.csv", 'w', newline='')
     # PATH FOR DOCKER:
-    runtime = open(SCHATSI_RUNTIME, 'w', newline='')
-    runtime_file = csv.writer(runtime, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+    #runtime = open(SCHATSI_RUNTIME, 'w', newline='')
+    #runtime_file = csv.writer(runtime, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     # writing a headline into the file
-    kopfzeile_runtime = ["start processing", "end processing", "duration (minutes)"]
-    runtime_file.writerow(kopfzeile_runtime)
+    #kopfzeile_runtime = ["start processing", "end processing", "duration (minutes)"]
+    #runtime_file.writerow(kopfzeile_runtime)
 
     # timestamp at the begin of the program and the normalized version which is written into "SCHATSI_runtime"
     start = datetime.now()

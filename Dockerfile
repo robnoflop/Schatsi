@@ -10,6 +10,6 @@ RUN apt-get update && apt-get install -y \
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src .
-COPY data /data
+COPY params /params
 
 CMD [ "python", "./main.py" ]
