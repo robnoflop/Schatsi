@@ -149,7 +149,7 @@ def main():
     start = datetime.now()
 
     for row in text_df.itertuples(index=True):
-        # Aufruf SCHATSI004: Filtering the expressions from the text and rank the Papers at the Base of the
+        # call SCHATSI004: Filtering the expressions from the text and rank the Papers at the Base of the
         # functional terms given by the User
         monogram = SCHATSI004.terms(row[2])
         bigram = SCHATSI004.bigrams(monogram)
