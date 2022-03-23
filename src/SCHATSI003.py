@@ -148,7 +148,7 @@ def references(input_text):
         first_appearence_sep = input_text.find(seperator)
         pure_references = input_text[first_appearence_sep:]
 
-        # Ausgangspunkt: Text, welcher mit dem Seperator beginnt.
+        # input here: Text, which starts with a seperator
         # For Style 0,1,2:
         if style < 3:
             while next_sep in pure_references:
