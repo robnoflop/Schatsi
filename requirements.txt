@@ -1,2 +1,2 @@
-pdftotext==2.2.1
+pdftotext==2.2.2
 pandas==1.3.4
