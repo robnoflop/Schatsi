@@ -91,4 +91,77 @@ We have chosen the Python library "pdftotext" for extracting the text from PDF's
 - The library is compact and therefore easy to use
 <br>
 
-![image2](pdftotext_example.png)
+### Here you can find some pseudocode, which explains the code in a very short, simplified way
+
+START
+
+CREATE python lists for every output-file
+READ stopwords FROM stopwords.csv
+READ functional terms FROM functional_terms.csv
+
+LOOP
+    OPEN a file in the Input-Folder 
+    CHECK what's the datatype of the file
+    IF 
+        (datatype IS pdf) 
+    THEN 
+        EXTRACT whole text from the file
+    WRITE filename, Datatype and if text could be extracted or not in an entry in a LIST
+    WRITE filename, text, reference text and datatype into a LIST for further working
+
+LOOP over the text list
+    COUNT all words in the text of a file 
+    WRITE filename, datatype, total number of words in a LIST
+    
+LOOP over the text list
+    IF
+        (new word found)
+    THEN 
+        CREATE a pairwise entry of the word and a counter AND INCREASE counter by 1
+    IF
+        (already known word found)
+    THEN 
+        INCREASE counter by 1
+    WRITE entries into monogram list
+    
+LOOP over the monogram list
+    TAKE a entry
+    TAKE next entry
+    CONTATE both entrys 
+    IF 
+        (already Known)
+    THEN 
+        INCREASE counter by 1
+    ELSE
+        WRITE result into bigram list AND CREATE a counter set to 1
+
+LOOP over the monogram list
+    TAKE a entry
+    TAKE next entry
+    TAKE next entry
+    CONTATE all three entrys 
+    IF 
+        (already Known)
+    THEN 
+        INCREASE counter by 1
+    ELSE
+        WRITE result into trigram list AND CREATE a counter set to 1
+
+FILTER entries from bigrams and trigrams which doesn't make any sense 
+WRITE monograms, bigrams and trigrams in a term list like {filename, monogram/bigram/trigram, counter}
+    
+LOOP for every file, whose text could be extracted
+    LOOP over the term list
+        IF
+            (term == functional term)
+        THEN
+            found_functional_terms = found_functional_terms + counter
+    SCORE = DEVIDE found_functional_term BY total_number_of_words_in_text
+    WRITE {filename, found_functional_terms, total_number_of_words_in_text, Score} in ranking list
+
+TURN every list into Python pandas dataframe 
+
+LOOP for all pandas dataframes 
+    WRITE dataframe into a CSV-file
+
+END
