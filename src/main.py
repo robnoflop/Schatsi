@@ -10,11 +10,82 @@ from variables import *
 
 
 """
-Start of the program:
-1. First timestamp for the calculation of the runtime
-2. One run of the whole programm, incl. SCHATSI002, SCHATSI003, SCHATSI004....
-3. Second timestamp for the calculation of the runtime
-4. Calculate the duration -> write the timestamps and the duration into the file "SCHATSI_runtime
+###############################################
+How Does SCHA.T.S.I work? What does SCHATSI do?
+###############################################
+
+START
+
+CREATE python lists for every output-file
+READ stopwords FROM stopwords.csv
+READ functional terms FROM functional_terms.csv
+
+LOOP
+    OPEN a file in the Input-Folder 
+    CHECK what's the datatype of the file
+    IF 
+        (datatype IS pdf) 
+    THEN 
+        EXTRACT whole text from the file
+    WRITE filename, Datatype and if text could be extracted or not in an entry in a LIST
+    WRITE filename, text, reference text and datatype into a LIST for further working
+
+LOOP over the text list
+    COUNT all words in the text of a file 
+    WRITE filename, datatype, total number of words in a LIST
+    
+LOOP over the text list
+    IF
+        (new word found)
+    THEN 
+        CREATE a pairwise entry of the word and a counter AND INCREASE counter by 1
+    IF
+        (already known word found)
+    THEN 
+        INCREASE counter by 1
+    WRITE entries into monogram list
+    
+LOOP over the monogram list
+    TAKE a entry
+    TAKE next entry
+    CONTATE both entrys 
+    IF 
+        (already Known)
+    THEN 
+        INCREASE counter by 1
+    ELSE
+        WRITE result into bigram list AND CREATE a counter set to 1
+
+LOOP over the monogram list
+    TAKE a entry
+    TAKE next entry
+    TAKE next entry
+    CONTATE all three entrys 
+    IF 
+        (already Known)
+    THEN 
+        INCREASE counter by 1
+    ELSE
+        WRITE result into trigram list AND CREATE a counter set to 1
+
+FILTER entries from bigrams and trigrams which doesn't make any sense 
+WRITE monograms, bigrams and trigrams in a term list like {filename, monogram/bigram/trigram, counter}
+    
+LOOP for every file, whose text could be extracted
+    LOOP over the term list
+        IF
+            (term == functional term)
+        THEN
+            found_functional_terms = found_functional_terms + counter
+    SCORE = DEVIDE found_functional_term BY total_number_of_words_in_text
+    WRITE {filename, found_functional_terms, total_number_of_words_in_text, Score} in ranking list
+
+TURN every list into Python pandas dataframe 
+
+LOOP for all pandas dataframes 
+    WRITE dataframe into a CSV-file
+
+END
 """
 
 
@@ -25,11 +96,11 @@ def main():
     # LOCAL PATH FOR TESTING:
     # runtime = open("SCHATSI_runtime.csv", 'w', newline='')
     # PATH FOR DOCKER:
-    #runtime = open(SCHATSI_RUNTIME, 'w', newline='')
-    #runtime_file = csv.writer(runtime, delimiter=';', quoting=csv.QUOTE_MINIMAL)
+    # runtime = open(SCHATSI_RUNTIME, 'w', newline='')
+    # runtime_file = csv.writer(runtime, delimiter=';', quoting=csv.QUOTE_MINIMAL)
     # writing a headline into the file
-    #kopfzeile_runtime = ["start processing", "end processing", "duration (minutes)"]
-    #runtime_file.writerow(kopfzeile_runtime)
+    # kopfzeile_runtime = ["start processing", "end processing", "duration (minutes)"]
+    # runtime_file.writerow(kopfzeile_runtime)
 
     # timestamp at the begin of the program and the normalized version which is written into "SCHATSI_runtime"
     start = datetime.now()
@@ -47,23 +118,31 @@ def main():
     print("Fetching parameters...", end="", flush=True)
 
     """
-    Preparation of the Stopwords for use in SCHATSI004 functions - import from file "SCHATSI_stopwords.csv
+    Preparation of the Stopwords for use in SCHATSI004 functions - import from file "stopwords.csv"
     """
     stopwords_list = []
     with open(SCHATSI_STOPWORDS) as stop:
         csv_reader_object = csv.reader(stop)
         for row in csv_reader_object:
             stopwords_list.append(row[0])
+        print("\nstopwords found")
     stopwords = set(stopwords_list)
 
+    """
+    Preperation of the given functional terms used by the ranking function, import from "functional_terms.csv"
+    """
     try:
         functional_terms = pd.read_csv(SCHATSI_FUNCTIONAL_TERMS, sep=';')
+        print("functional terms found")
+        print(functional_terms)
     except:
+        print("functional terms not found, or import of the terms not possible, moving on without them")
         pass
 
     print("done")
-    print("Processing files for run:")
 
+    print("Processing files for run:")
+    # This block contains all functions which for SCHATSI002 and SCHATSI003.002 -> Included files with meta data
     for path, subdirs, files in os.walk(SCHATSI_INPUT_FOLDER):
         for filename in files:
             print(filename)
@@ -71,7 +150,7 @@ def main():
             # with data path
             g = os.path.join(path, filename)
 
-            # Filename in 'Schatsi_included.txt' schreiben, ohne den Dateipfad/ in csv-Datei
+            # write Filename in 'Schatsi_included.txt' without data path
             f = os.path.join(filename)
 
             try:
@@ -118,8 +197,9 @@ def main():
 
             output_included.append(zeile)
 
-            # the outputfile will get a layout like this
             """
+            the outputfile will get a layout like this:
+            
             filename | type | included | excluded
             --------------------------------------
             abc.pdf  | pdf  |     X    |    __        <-- The text of this document could be extracted without any problems
@@ -127,15 +207,15 @@ def main():
             ...                                           the files wont be included in the next steps 
             ...
             """
-    
+
+    # This DataFrame  is used as a working dataframe, it contains the filename, datatype, raw text and raw references
     text_df = pd.DataFrame(text_array, columns=['filename', 'text_only', 'reference text', 'type'])
-
-
     finish = datetime.now()
     duration_program = (finish - start).seconds / 60
     runtime.append(['SCHATSI_included', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
     start = datetime.now()
 
+    # This block contains all functions of SCHATSI003.001 -> Counting total number of words
     for row in text_df.itertuples(index=True):
         # Calls the function of SCHATSI003: Count words
         total_num_words = SCHATSI003.count_words(row[2])
@@ -143,11 +223,13 @@ def main():
         zeile_data_cleansing = {'filename': row[1], 'type': row[4], 'total count': total_num_words}
         output_data_cleansing.append(zeile_data_cleansing)
 
+    datacleansing_df = pd.DataFrame(output_data_cleansing, columns=["filename", "type", "total count"])
     finish = datetime.now()
     duration_program = (finish - start).seconds / 60
     runtime.append(['SCHATSI_datacleansing', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
     start = datetime.now()
 
+    # This block contains all function of SCHATSI004.001 -> Counting functional terms
     for row in text_df.itertuples(index=True):
         # call SCHATSI004: Filtering the expressions from the text and rank the Papers at the Base of the
         # functional terms given by the User
@@ -178,6 +260,7 @@ def main():
     runtime.append(['SCHATSI_terms', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
     start = datetime.now()
 
+    # This block contains all function calls of SCHATSI003.003 -> Extracting Reference Data
     for row in text_df.itertuples(index=True):
         """
         reference_list = SCHATSI003.references(references)
@@ -195,30 +278,30 @@ def main():
     runtime.append(['SCHATSI_references', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
     start = datetime.now()
 
+    # This block contains all function calls of SCHATSI004.002 -> Create a Ranking of the the Files
     terms_df = pd.DataFrame(output_terms, columns=["filename", "term", "term count"])
-
     try:
         ranking_df = SCHATSI004.ranking(functional_terms, terms_df)
     except:
-        ranking_df = pd.DataFrame(columns=["X","filename","sum_functional_terms","sum_terms","result"])
-		
+        ranking_df = pd.DataFrame(columns=["X", "filename", "sum_functional_terms", "sum_terms", "result"])
+
     finish = datetime.now()
     duration_program = (finish - start).seconds / 60
     runtime.append(['SCHATSI_ranking', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
     duration_program = (finish - start_total).seconds / 60
     runtime.append(['whole Program', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
 
+    # Creating the dataframes, which will be saved as .csv-Files
     print("Saving output files...", end="", flush=True)
-
     outputs = [
-        ['schatsi_included.csv', pd.DataFrame(output_included, columns=["filename", "type", "included", "excluded"])],
-        ['schatsi_data_cleansing.csv', pd.DataFrame(output_data_cleansing, columns=["filename", "type", "Total Count"])],
+        ['schatsi_data_cleansing.csv', datacleansing_df],
         ['schatsi_references.csv', pd.DataFrame(output_references, columns=['filename', 'raw reference string'])],
         ['schatsi_terms.csv', terms_df],
         ['schatsi_ranking.csv', ranking_df],
-        ['schatsi_runtime.csv', pd.DataFrame(runtime, columns=['process', 'start processing', 'end processing', 'duration'])]
+        ['schatsi_runtime.csv', pd.DataFrame(runtime, columns=['process', 'start processing', 'end processing', 'duration'])],
+        ['schatsi_included.csv', pd.DataFrame(output_included, columns=["filename", "type", "included", "excluded"])]
     ]
-
+    # Creating the output-files
     for output in outputs:
         output[1].to_csv(r"{}/{}".format(SCHATSI_OUTPUT_FOLDER, output[0]), mode="wb", encoding="utf-8", sep=';', index=False)
 
