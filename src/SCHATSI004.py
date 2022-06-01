@@ -173,7 +173,7 @@ def trigram_filtering(trigram_list, stopwords):
     # returning the list with the filtered trigram expressions and a list with the total number of each word
     return trigram_list_filtered, trigram_count_filtered
 
-
+"""
 def ranking(functional_terms_input, terms_input):
     # local path
 
@@ -236,3 +236,4 @@ def ranking(functional_terms_input, terms_input):
     # Drop out the Columns with the Sum of functional terms and the global sum of terms
     # merged_df.drop(['sum_functional_terms', 'sum_terms'], axis=1)
     return merged_df
+"""

@@ -7,6 +7,7 @@ from datetime import datetime
 import SCHATSI003  # import string_preparation, count_words, references, reference_data_cutting
 import SCHATSI004  # import terms, bigrams, trigrams, term_filtering,....
 from variables import *
+import shutil
 
 
 """
@@ -105,6 +106,7 @@ def main():
     # timestamp at the begin of the program and the normalized version which is written into "SCHATSI_runtime"
     start = datetime.now()
     start_total = start
+    print("SCHA.T.S.I Data Cleanser - Version1.4.2")
     print("Execution started at", start.isoformat())
 
     output_included = []
@@ -127,17 +129,6 @@ def main():
             stopwords_list.append(row[0])
         print("\nstopwords found")
     stopwords = set(stopwords_list)
-
-    """
-    Preperation of the given functional terms used by the ranking function, import from "functional_terms.csv"
-    """
-    try:
-        functional_terms = pd.read_csv(SCHATSI_FUNCTIONAL_TERMS, sep=';')
-        print("functional terms found")
-        print(functional_terms)
-    except:
-        print("functional terms not found, or import of the terms not possible, moving on without them")
-        pass
 
     print("done")
 
@@ -276,20 +267,21 @@ def main():
     finish = datetime.now()
     duration_program = (finish - start).seconds / 60
     runtime.append(['SCHATSI_references', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
-    start = datetime.now()
 
     # This block contains all function calls of SCHATSI004.002 -> Create a Ranking of the the Files
     terms_df = pd.DataFrame(output_terms, columns=["filename", "term", "term count"])
+
+    """
     try:
         ranking_df = SCHATSI004.ranking(functional_terms, terms_df)
     except:
         ranking_df = pd.DataFrame(columns=["X", "filename", "sum_functional_terms", "sum_terms", "result"])
 
-    finish = datetime.now()
+    
     duration_program = (finish - start).seconds / 60
     runtime.append(['SCHATSI_ranking', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
-    duration_program = (finish - start_total).seconds / 60
-    runtime.append(['whole Program', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
+    """
+
 
     # Creating the dataframes, which will be saved as .csv-Files
     print("Saving output files...", end="", flush=True)
@@ -297,13 +289,21 @@ def main():
         ['schatsi_data_cleansing.csv', datacleansing_df],
         ['schatsi_references.csv', pd.DataFrame(output_references, columns=['filename', 'raw reference string'])],
         ['schatsi_terms.csv', terms_df],
-        ['schatsi_ranking.csv', ranking_df],
+        # ['schatsi_ranking.csv', ranking_df],
         ['schatsi_runtime.csv', pd.DataFrame(runtime, columns=['process', 'start processing', 'end processing', 'duration'])],
         ['schatsi_included.csv', pd.DataFrame(output_included, columns=["filename", "type", "included", "excluded"])]
     ]
     # Creating the output-files
     for output in outputs:
         output[1].to_csv(r"{}/{}".format(SCHATSI_OUTPUT_FOLDER, output[0]), mode="wb", encoding="utf-8", sep=';', index=False)
+
+    # Move functional_terms.csv and negative_terms.csv into the output-folder, required for the SCHATSI_RANKER
+    shutil.move(SCHATSI_FUNCTIONAL_TERMS, os.path.join(SCHATSI_OUTPUT_FOLDER, 'functional_terms.csv'))
+    shutil.move(SCHATSI_NEGATIVE_TERMS, os.path.join(SCHATSI_OUTPUT_FOLDER, 'negative_terms.csv'))
+
+    finish = datetime.now()
+    duration_program = (finish - start_total).seconds / 60
+    runtime.append(['whole Program', start.strftime(datetime_format), finish.strftime(datetime_format), duration_program])
 
     print("done")
 
