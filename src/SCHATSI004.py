@@ -1,9 +1,7 @@
 """
-SCHATSI004:
+SCHATSI004: Term finding and filtering
 
-####004.001: Read Ranking
-
-######## 004.001.001: Register every term
+Register every term
 
 - register every existing term in the text
 - Bigrams: Register every useful phrase with two words, e.g. 'Artifical Intelligence', 'Data Science',...
@@ -12,44 +10,25 @@ SCHATSI004:
 For this tasks use filter to delete unuseful terms, like filling words (of, the, otherwise,...), or bigrams and
 trigrams, which don't make any sense, for example 'on the road', 'of algorithm', 'Use of the'...
 
-There has to be a filter for characters like '.', ',', ';', '-', '?', '!'..., so that these characters won't be
-part of a word.
+- term_filtering
+- bigram_filtering
+- trigram_filtering
 
 INPUT: string which contains the whole text from a paper
-OUTPUT: a list which all terms, filtered for unuseful terms and unuseful phrases
-
-
-######## 004.001.002: Ranking
-
-INPUT: list with all terms from 004.001.001 AND Meta data table from SCHATSI003.002 (Data Cleansing)
-OUTPUT: A File called "SCHATSI_terms.csv", which contains all entries for every paper in the following style
-
-Filename (as Foreign key)   | Author    | Year  | Title     | Total Count   | Term      | Term Count
------------------------------------------------------------------------------------------------------
-example.pdf                 | Mr. M     | 1999  | Blabla    |  20345        | Pointer   | 15
-example.pdf                 | Mr. M     | 1999  | Blabla    |  20345        | Stack     | 2
-example.pdf                 | Mr. M     | 1999  | Blabla    |  20345        | Array     | 71
-...                             ...         ...     ...         ...             ...         ...
-Miller.pdf                  | Mr. X     | 2010  | MyLife    |  10000        | Pointer   | 33
-Miller.pdf                  | Mr. X     | 2010  | MyLife    |  10000        | Beer      | 2
-Miller.pdf                  | Mr. X     | 2010  | MyLife    |  10000        | Family member   | 45
-...                             ...         ...     ...         ...             ...         ...
-
-NOTE: The first 5 coloums are from SCHATSI_datacleansing.csv (1-4) and from SCHATSI_included.csv (5)
-
-- For every Paper there has to be a routine for every element in the list of terms from 004.001.001, so that
-the frequency of a term is counted and a line is written in the file "SCHATSI_terms.csv"
+OUTPUT: a list which all terms, bigrams and trigrams, filtered for unuseful terms and unuseful phrases
 """
+# NOTE: Ranking Function was deleted from this file and is now part of the "SCHATSI_Ranker" (to find in the other repo with the same name), the code was put in a comment for understanding the history and as a backup
 
 import pandas as pd
 
-
+# Function for founding all single terms, contains all, even the unuseful 
 def terms(text):
     word = ""
     entry = ""
     term_list = []
     i = 0
-
+    
+    # list of special chars which could seperate the terms in the paper, they will be used to isolate a single term from the string
     special_chars = [' ', '\n', '\t', '.', ',', '?', '!', '%', '&', '/', '(', ')', '[', ']', '{', '}', '=', '§', '$',
                      '€', ":", ";", "|", "@", "+", "-", "*", "~", "#", "'", "_", ">", "<", "`", "´", "\"", "\'", "/"]
 
@@ -74,7 +53,8 @@ def terms(text):
             entry = ""
     return term_list
 
-
+# This functions builds up all possible bigrams which could be found in the string
+# Uses the term_list and picks up the first two entries, combines them and writes them into the bigram_list, after that the second and the third... and so on
 def bigrams(term_list):
     bigram = []
     bigram_list = []
@@ -87,7 +67,7 @@ def bigrams(term_list):
         bigram = []
     return bigram_list
 
-
+# Function for building up all trigrams which could be in the string, same procedure as in bigrams, just with three entries 
 def trigrams(term_list):
     trigram = []
     trigram_list = []
@@ -101,7 +81,9 @@ def trigrams(term_list):
         trigram = []
     return trigram_list
 
-
+# This functions filters all unusefull words and all duplicates out of the list
+# The file "stopwords.csv contains a list of nearly all stopwords in the english language, if a term is in the list it will be removed
+# Also the number of all terms will be counted
 def term_filtering(term_list, stopwords):
     # remove duplicates and filter for unuseful words
     term_list_filtered = []
@@ -133,6 +115,7 @@ def bigram_filtering(bigram_list, stopwords):
             continue
         elif element[0] in stopwords or element[1] in stopwords:
             # filter for unuseful expression like "of the", "water is", "the road"...
+            # Used RULE: Only bigrams where the first AND the second word are no stopwords will be written in the filtered list
             continue
         else:
             bigram_list_filtered.append(element)
@@ -158,6 +141,8 @@ def trigram_filtering(trigram_list, stopwords):
             continue
         elif element[0] not in stopwords and element[1] in stopwords and element[2] not in stopwords:
             # filter for unuseful expressions like: "in the end", "trust is the",....
+            # RULE: Only trigrams, where the first AND the last word are no stopwords And the second word IS a stopword will be written into the filtered_list
+            # This is nessecary for trigrams like "Internet of Things" and other correct expressions with 3 words in it
             trigram_list_filtered.append(element)
         else:
             continue
@@ -173,6 +158,13 @@ def trigram_filtering(trigram_list, stopwords):
     # returning the list with the filtered trigram expressions and a list with the total number of each word
     return trigram_list_filtered, trigram_count_filtered
 
+
+
+
+# This function contains the Ranking - In the moment SCHATSI gets a new Structure, so that the whole system became more resist and flexible. 
+# This Function is now located in the "SCHATSI_Ranker", a new docker container which takes the output from SCHATSI / SCHATSI_DataCleanser and generates the ranking
+# in the moment, the commented function below only serves as a backup and for a potential roll-back in the future
+# Otherwise it can be deleted 
 """
 def ranking(functional_terms_input, terms_input):
     # local path
