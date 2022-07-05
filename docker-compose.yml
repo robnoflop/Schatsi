@@ -3,7 +3,8 @@ services:
   test:
     image: hlast96/schatsi:20220601
     volumes:
-      #- /home/h/Github/Testpdfs:/data/input
-      #- /home/h/schatsi_docker:/data/output
       - ${INPUT_DIRECTORY}:/data/input
       - ${OUTPUT_DIRECTORY}:/data/output
+      
+# The Code above is used for building up 2 volumes, one for the input and one for the output.
+# The Input directory will be filled with the input data, i.e. the papers and the nessecary files like the stopwords.csv oder functional_terms.csdv
