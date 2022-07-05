@@ -36,7 +36,7 @@ def string_preparation(input_text):
 
     return low_string_without_references, references
 
-
+# Function to count all words in the text (without references), iterating over the string, when a seperator char like " " or a break like "\n" is found and the letter after that is neither a sep or a break a new word was found and the number of words increases by 1
 def count_words(input_text):
     num_words = 0
     past_letter = " "
@@ -52,10 +52,13 @@ def count_words(input_text):
 
 
 """SCHATSI003.2: Extract the Metadata from the Paper
-
+    - Author
+    - Year of publication 
+    - title
+    - origin, like the book, a database or a convention paper
 """
 
-
+# The Extraction of meta data couldn't be realised in the past, because the place in the papers where this informations appear are not normed -> high effort for correct detection
 def metadata_author(input_text):
     pass
 
@@ -75,8 +78,12 @@ def metadata_origin(input_text):
 """SCHATSI003.3: Extract all References from the paper and store the Information in a new file -> one for each paper
 
 """
+# The functions to find and cut the references from the String were implemented in the past, will not be called in the moment in the main-function, because the papers references and citation styles aren't normalized, so that the quality of detection varies fromm paper to paper
+# In the moment, the year could be found quite good, other parts need an update
+# Problems are, that there are far more different styles for the references and that the start char chain could appear in the middle of a citation, which disturbes the algorithm, for example when a digit appears in the title of a string like "1. Time ....."
 
-
+# A possible solution could be the usage of "regular expression to modell different styles and detect them better.
+# Another one could be to search in the references line-wise and detect when a reference ends, so it would not be nessesary to search for seperators
 def reference_data_cutting(input_text):
     # Input: String, every String contains 1 reference
     # for different sorts of literature the cutting could be different
@@ -115,7 +122,8 @@ def reference_data_cutting(input_text):
     # + reference_title)
     return reference_author, reference_year, reference_title
 
-
+# This function tries to seperate the particular references by finding their start char chain, for example [1]......[2].....[3]... or pure 1 ..... 2....
+# 4 Styles are detected in the moment: [1], 1., 1 and a pure citation one after another, which will be seperated by a line-break \n
 def references(input_text):
 
     ref_list = []
@@ -126,7 +134,7 @@ def references(input_text):
         return ref_list
 
     else:
-        # Seperatorstyle detection
+        # Seperatorstyle detection if the reference string is not empty -> search for the start string to find out which style is used
         if input_text.find("[1]") >= 0:
             seperator = "[" + str(number) + "] "
             next_sep = "[" + str(number+1) + "] "
@@ -197,5 +205,5 @@ def references(input_text):
                 ref = ref.replace(seperator, "", 1)
 
                 ref_list.append(ref)
-
+        # Output is a python list which contains the seperated reference strings -> In this strings the title, year etc. could be found
         return ref_list
