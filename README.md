@@ -8,15 +8,6 @@ For this purpose, techniques of text analysis, natural language processing (NLP)
 
 Currently, SCHA.T.S.I can be used on Windows and Linux and with Release 1.3 a Beta version for MacOS accessible (No Guarrentee - Feedback is Welcome) :-)
 
----
-
-SCHA.T.S.I - Eine Abkürzung für '**SCH**eduling *A*lgorithm for **T**ext **S**each **I**ntelligence'
-Dieses Projekt ist am Lehrstuhl Service Operation an der Universität Rostock angesiedelt. Mit fortschreitendem Entwicklungsstand soll die Software die Analyse von wissenschaftlichen Papern und Veröffentlichungen beschleunigen und dem Nutzer selbst bei hunderten Veröffentlichen einen Überblick über die Zusammenhänge zwischen den Papern und eine Priorisierung der Veröffentlichungen für den Nutzer hinsichtlich seiner selbstgestellten Vorgaben bereit stellen.
-Neben der Analyse sollen die Ergebnisse nicht nur in tabellarischer Form, sondern zusätzlich in einer grafischen Übersicht bereitgestellt werden, um die Zusammenhänge zwischen den Papern und ihren Autoren durchdringen zu können.
-Dazu werden Techniken der Textanalyse, der Verarbeitung natürlicher Sprache (NLP) und des Maschinellen Lernens (ML) eingesetzt.
-
-Aktuell kann SCHA.T.S.I auf Windows und Linux genutzt werden, des Weiteren ist eine Beta Version für MacOS ab Release 1.3 verfügbar (Keine Garantien - Feedback erwünscht) :-) 
-
 ## How to run SCHATSI
 
 ### Systemrequirements
@@ -28,37 +19,13 @@ On Docker's website, installers for all common operating systems are available. 
 
 On Linux, the software stores of the respective distribution can also be used.
 
----
-Für alle Betriebssysteme ist das Vorhandensein einer aktuellen **Docker** Installation Vorrraussetzung für die Nutzung der Software, da SCHA.T.S.I als Docker-Image bereitgestellt wird.
-Des Weiteren muss auf einem Linux-System **Docker-Compose** zusätzlich installiert werden, da es in der Linux-Variante von Docker -im Gegensatz zu Docker für Windows- nicht vorhanden ist.
-
-Auf der Website von Docker sind Installer für alle gängigen Betriebssysteme vorhanden. Docker: https://www.docker.com/get-started
-
-Auf Linux können zudem die Software-Stores der jeweiligen Distribution genutzt werden.
-
-
-<br>
-
-![image](bild_1_docker.png)
-<br>
-
 A guide for the installation under Windows, should there be problems, can be found here.
-Eine Anleitung für die Installation unter Windows, sollte es Probleme geben finden Sie hier.
 https://docs.docker.com/desktop/windows/install/
 
 ### Running SCHA.T.S.I
 
 After Docker has been installed you will need to download the latest version of our software. You can find it on the right side of this Github page under **RELEASES**. There you will find a .zip folder for your operating system under each release with the tag "latest release".
 Download this and unzip the content into a folder of your choice. 
-
----
-
-Nachdem Docker installiert wurde müssen sich die aktuelle Version unserer Software herunterladen. Diese finden Sie auf der rechten Seite dieser Github-Seite unter **RELEASES**. Dort finden sie unter der Veröffentlichung mit dem Tag "latest release" jeweils einen .Zip-Ordner für ihr Betriebssystem.
-Dieses laden Sie herunter und entpacken den Inhalt in einen Ordner ihrer Wahl. 
-<br>
-
-![image](bild_3_github_releases.png)
-<br>
 
 You will receive two files: "docker-compose.yml", "SCHATSI_RUN" and a PDF file with a summary for using the software.
 
@@ -68,7 +35,31 @@ To start the software you now have to run the "SCHATSI_RUN" file. That was all. 
 
 A window will open where you navigate to your folder with the PDF files you want to examine. After that, SCHA.T.S.I will do the work for you and put its results in a folder named "output". You will find this folder in the same place on this system where you placed the two unzipped files.
 
+
 ---
+SCHA.T.S.I - Eine Abkürzung für '**SCH**eduling *A*lgorithm for **T**ext **S**each **I**ntelligence'
+Dieses Projekt ist am Lehrstuhl Service Operation an der Universität Rostock angesiedelt. Mit fortschreitendem Entwicklungsstand soll die Software die Analyse von wissenschaftlichen Papern und Veröffentlichungen beschleunigen und dem Nutzer selbst bei hunderten Veröffentlichen einen Überblick über die Zusammenhänge zwischen den Papern und eine Priorisierung der Veröffentlichungen für den Nutzer hinsichtlich seiner selbstgestellten Vorgaben bereit stellen.
+Neben der Analyse sollen die Ergebnisse nicht nur in tabellarischer Form, sondern zusätzlich in einer grafischen Übersicht bereitgestellt werden, um die Zusammenhänge zwischen den Papern und ihren Autoren durchdringen zu können.
+Dazu werden Techniken der Textanalyse, der Verarbeitung natürlicher Sprache (NLP) und des Maschinellen Lernens (ML) eingesetzt.
+
+Aktuell kann SCHA.T.S.I auf Windows und Linux genutzt werden, des Weiteren ist eine Beta Version für MacOS ab Release 1.3 verfügbar (Keine Garantien - Feedback erwünscht) :-) 
+
+## Wie bringe ich SCHA.T.S.I zum laufen?
+
+### Systemvoraussetzungen
+Für alle Betriebssysteme ist das Vorhandensein einer aktuellen **Docker** Installation Vorraussetzung für die Nutzung der Software, da SCHA.T.S.I als Docker-Image bereitgestellt wird.
+Des Weiteren muss auf einem Linux-System **Docker-Compose** zusätzlich installiert werden, da es in der Linux-Variante von Docker -im Gegensatz zu Docker für Windows- nicht vorhanden ist.
+
+Auf der Website von Docker sind Installer für alle gängigen Betriebssysteme vorhanden. Docker: https://www.docker.com/get-started
+
+Auf Linux können zudem die Software-Stores der jeweiligen Distribution genutzt werden.
+
+Eine Anleitung für die Installation unter Windows, sollte es Probleme geben finden Sie hier.
+https://docs.docker.com/desktop/windows/install/
+
+### Wie starte ich die Software?
+Nachdem Docker installiert wurde müssen sich die aktuelle Version unserer Software herunterladen. Diese finden Sie auf der rechten Seite dieser Github-Seite unter **RELEASES**. Dort finden sie unter der Veröffentlichung mit dem Tag "latest release" jeweils einen .Zip-Ordner für ihr Betriebssystem.
+Dieses laden Sie herunter und entpacken den Inhalt in einen Ordner ihrer Wahl. 
 
 Sie erhalten zwei Dateien: "docker-compose.yml", "SCHATSI_RUN" und eine PDF-Datei mit einer Zusammenfassung für die Nutzung der Software.
 
@@ -77,91 +68,3 @@ Sie erhalten zwei Dateien: "docker-compose.yml", "SCHATSI_RUN" und eine PDF-Date
 Um die Software zu starten müssen Sie nun noch die "SCHATSI_RUN"-Datei starten. Das war alles. Keine umständlichen Installationen, keine Konfiguration. Einfach starten und das wars. (Hinweis: Unter einigen Systemen kann es nötig sein, die "SCHATSI_RUN" mit Administratorrechten auszuführen, da Docker unter einigen Systemen Administratorrechte voraussetzt)
 
 Es öffnet sich ein Fenster, in dem Sie zu ihrem Ordner mit den zu untersuchenden PDF-Dateien navigieren. Im Anschluss daran, wird SCHA.T.S.I die Arbeit für Sie übernehmen und seine Ergebnisse in einem Ordner mit dem Namen "output" ablegen. Diesen finden Sie an dem Ort auf diesem System, an dem Sie die beiden entpackten Dateien abgelegt haben.
-
-## How does it work?
-In this chapter we will explain how SCHA.T.S.I does its work and how we choose the libraries and modules which we use to build the software.
-
-### Text Extraction using "pdftotext"-Library
-
-We have chosen the Python library "pdftotext" for extracting the text from PDF's files. This has several reasons
-
-- Firstly, all words in our samples were correctly recognized
-- The library allows to keep text and page structuring when outputting as string which is useful to recognize specific constructs, for example, the references of a Harvard citation style paper, where inserts are used to organize the bibliography rather than consecutive numbers 
-- It also recognizes text on figures, diagrams and in tables, which increases the correctness of predictions for publications with a high proportion of these elements
-- The library is compact and therefore easy to use
-<br>
-
-### Here you can find some pseudocode, which explains the code in a very short, simplified way
-
-START
-
-CREATE python lists for every output-file
-READ stopwords FROM stopwords.csv
-READ functional terms FROM functional_terms.csv
-
-LOOP
-    OPEN a file in the Input-Folder 
-    CHECK what's the datatype of the file
-    IF 
-        (datatype IS pdf) 
-    THEN 
-        EXTRACT whole text from the file
-    WRITE filename, Datatype and if text could be extracted or not in an entry in a LIST
-    WRITE filename, text, reference text and datatype into a LIST for further working
-
-LOOP over the text list
-    COUNT all words in the text of a file 
-    WRITE filename, datatype, total number of words in a LIST
-    
-LOOP over the text list
-    IF
-        (new word found)
-    THEN 
-        CREATE a pairwise entry of the word and a counter AND INCREASE counter by 1
-    IF
-        (already known word found)
-    THEN 
-        INCREASE counter by 1
-    WRITE entries into monogram list
-    
-LOOP over the monogram list
-    TAKE a entry
-    TAKE next entry
-    CONTATE both entrys 
-    IF 
-        (already Known)
-    THEN 
-        INCREASE counter by 1
-    ELSE
-        WRITE result into bigram list AND CREATE a counter set to 1
-
-LOOP over the monogram list
-    TAKE a entry
-    TAKE next entry
-    TAKE next entry
-    CONTATE all three entrys 
-    IF 
-        (already Known)
-    THEN 
-        INCREASE counter by 1
-    ELSE
-        WRITE result into trigram list AND CREATE a counter set to 1
-
-FILTER entries from bigrams and trigrams which doesn't make any sense 
-WRITE monograms, bigrams and trigrams in a term list like {filename, monogram/bigram/trigram, counter}
-    
-LOOP for every file, whose text could be extracted
-    LOOP over the term list
-        IF
-            (term == functional term)
-        THEN
-            found_functional_terms = found_functional_terms + counter
-    SCORE = DEVIDE found_functional_term BY total_number_of_words_in_text
-    WRITE {filename, found_functional_terms, total_number_of_words_in_text, Score} in ranking list
-
-TURN every list into Python pandas dataframe 
-
-LOOP for all pandas dataframes 
-    WRITE dataframe into a CSV-file
-
-END
