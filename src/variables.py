@@ -22,6 +22,10 @@ else:
 SCHATSI_INPUT_FOLDER = os.path.join(path_prefix, "input")
 # this path specifies where the output of container
 SCHATSI_OUTPUT_FOLDER = os.path.join(path_prefix, "output")
+
+if not os.path.exists(SCHATSI_OUTPUT_FOLDER):
+    os.makedirs(SCHATSI_OUTPUT_FOLDER)
+
 # the path for the functional_terms.csv
 SCHATSI_FUNCTIONAL_TERMS = os.path.join(SCHATSI_INPUT_FOLDER, "functional_terms.csv")
 # the path for the negative_terms.csv
