@@ -31,10 +31,7 @@ SCHATSI_RUNTIME = os.path.join(SCHATSI_OUTPUT_FOLDER, "schatsi_runtime.csv")
 
 # Static input
 # in the moment there is only the "stopwords.csv" as a parameter file. But when other static input files will be needed /path_prefix/params/FILENAME is the right place for it
-if run_id == '':
-    SCHATSI_STOPWORDS = "params/stopwords.csv"
-else:
-    SCHATSI_STOPWORDS = os.path.join(path_prefix, "params/stopwords.csv")
+SCHATSI_STOPWORDS = "/params/stopwords.csv"
 
 
 
