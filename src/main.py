@@ -1,9 +1,13 @@
 import os
 import csv
+from pathlib import Path
+from typing import List, Union
 import fitz
 import pandas as pd
 import SCHATSI003
 import SCHATSI004
+from processor.text_cleaner import TextCleaner
+from reader.reader_facade import ReaderFacade
 from variables import *
 import shutil
 from loguru import logger
@@ -15,6 +19,7 @@ from nltk.stem import PorterStemmer
 
 nltk.download("punkt")
 
+file_reader = ReaderFacade()
 
 def main():
     programm_execution_logger = ExcutionLogger()
@@ -145,26 +150,18 @@ def main():
     logger.info("done")
 
 
-def get_pdf_text(file_path: str) -> str:
-    doc = fitz.open(file_path)
-    out = ""
-    for page in doc:
-        text = page.get_text()
-        out += text
-    return out
+text_cleaner = TextCleaner()
+
+def process_file(file_path: Union(str,Path)):
+    text: str = file_reader.read(file_path)
+    monogram : List[str] = text_cleaner.clean(text, True)
+    bigram: List[str] = list(nltk.bigrams(monogram))
+    bigram_filtered, bigram_number = SCHATSI004.bigram_filtering(bigram)
+    trigram: List[str] = list(nltk.trigrams(monogram))
+    trigram_filtered, trigram_number = SCHATSI004.trigram_filtering(trigram)
 
 
 def process_input():
-    """
-    the outputfile will get a layout like this:
-    filename | type | included | excluded
-    --------------------------------------
-    abc.pdf  | pdf  |     X    |    __        <-- The text of this document could be extracted without any problems
-    err.pdf  | pdf  |    __    |     X        <-- There was a problem and the document text could not be extracted,
-    ...                                           the files wont be included in the next steps
-    ...
-
-    """
     results = []
     output_included = []
 
@@ -172,7 +169,7 @@ def process_input():
         for filename in files:
             file_path = os.path.join(path, filename)
             try:
-                text = get_pdf_text(file_path)
+                text = file_reader.read(file_path)
             except Exception as e:
                 datatype = "unreadable file"
                 row = [filename, datatype, "__", "X"]
