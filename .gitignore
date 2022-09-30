@@ -529,3 +529,5 @@ FodyWeavers.xsd
 
 .vscode
 .vs
+
+*.pdf
