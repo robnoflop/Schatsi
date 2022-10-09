@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
@@ -20,4 +20,5 @@ class TextCleaner:
             return monogram
         
         return " ".join(monogram)
+        
         

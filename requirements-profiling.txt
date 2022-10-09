@@ -1,0 +1,4 @@
+snakeviz==2.1.1
+
+#python -m cProfile -o script.profile .\src\main.py
+#snakeviz .\script.profile

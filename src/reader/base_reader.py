@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Union
 from pathlib import Path
+from models.document import Document
 
 from reader.reader_type import ReaderType
 
@@ -18,5 +19,5 @@ class BaseReader(ABC):
     
         
     @abstractmethod
-    def read(self, file_path: Union[str, Path]) -> str:
+    def read(self, file_path: Union[str, Path]) -> Document:
         pass

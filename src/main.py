@@ -1,197 +1,132 @@
 import os
-import csv
-from pathlib import Path
-from typing import List, Union
-import fitz
+from typing import List
 import pandas as pd
-import SCHATSI003
-import SCHATSI004
+from models.document import Document
+from processor.ngram_processor import NgramProcessor
+from processor.ranker import Ranker
 from processor.text_cleaner import TextCleaner
 from reader.reader_facade import ReaderFacade
 from variables import *
-import shutil
-from loguru import logger
 import nltk
-from execution_logger import ExcutionLogger
 from tqdm import tqdm
 from nltk.corpus import stopwords
-from nltk.stem import PorterStemmer
+import collections
+
 
 nltk.download("punkt")
 
+text_cleaner = TextCleaner()
+stop_words = set(stopwords.words("english"))
 file_reader = ReaderFacade()
+ranker = Ranker(SCHATSI_FUNCTIONAL_TERMS)
+ngram_porcessor = NgramProcessor()
+
 
 def main():
-    programm_execution_logger = ExcutionLogger()
-    programm_execution_logger.start()
-    logger.info("SCHA.T.S.I Data Cleanser - Version1.4.2")
-    programm_execution_logger.log_start()
-
-    output_data_cleansing = []
-    output_references = []
-    output_terms = []
-
-    execution_logger = ExcutionLogger()
-    execution_logger.start()
-    logger.info("Processing files for run:")
-    text_df, output_included = process_input()
-    execution_logger.log_end("SCHATSI_included")
-
-    execution_logger = ExcutionLogger()
-    execution_logger.start()
-    for row in text_df.itertuples(index=True):
-        total_num_words = SCHATSI003.count_words(row[2])
-        zeile_data_cleansing = {
-            "filename": row[1],
-            "type": row[4],
-            "total count": total_num_words,
-        }
-        output_data_cleansing.append(zeile_data_cleansing)
-
-    datacleansing_df = pd.DataFrame(
-        output_data_cleansing, columns=["filename", "type", "total count"]
-    )
-    execution_logger.log_end("SCHATSI_datacleansing")
-
-    execution_logger = ExcutionLogger()
-    execution_logger.start()
-    stop_words = set(stopwords.words("english"))
-    ps = PorterStemmer()
-    for row in tqdm(text_df.itertuples(index=True)):
-        monogram = nltk.word_tokenize(row[2])
-        monogram = [word.lower() for word in monogram if word.isalpha()]
-        monogram = [w for w in monogram if not w.lower() in stop_words]
-        monogram = [ps.stem(w) for w in monogram]
-        mono_filtered, mono_number = SCHATSI004.term_filtering(monogram)
-
-        bigram = list(nltk.bigrams(monogram))
-        bigram_filtered, bigram_number = SCHATSI004.bigram_filtering(bigram)
-
-        trigram = list(nltk.trigrams(monogram))
-        trigram_filtered, trigram_number = SCHATSI004.trigram_filtering(trigram)
-
-        filename_as_list = [row[1]] * len(mono_filtered)
-        output_terms = output_terms + list(
-            zip(filename_as_list, mono_filtered, mono_number)
-        )
-
-        joined_bigram = [" ".join(x) for x in bigram_filtered]
-        output_terms = output_terms + list(
-            zip(filename_as_list, joined_bigram, bigram_number)
-        )
-
-        joined_trigram = [" ".join(x) for x in trigram_filtered]
-        output_terms = output_terms + list(
-            zip(filename_as_list, joined_trigram, trigram_number)
-        )
-
-    execution_logger.log_end("SCHATSI_terms")
-
-    execution_logger = ExcutionLogger()
-    execution_logger.start()
-    for row in text_df.itertuples(index=True):
-        refs_raw_zeile = [row[1], row[3]]
-        output_references.append(refs_raw_zeile)
-    execution_logger.log_end("SCHATSI_references")
-
-    execution_logger = ExcutionLogger()
-    execution_logger.start()
-    terms_df = pd.DataFrame(output_terms, columns=["filename", "term", "term count"])
-    functional_terms = pd.read_csv(SCHATSI_FUNCTIONAL_TERMS, sep=";")
-    try:
-        ranking_df = SCHATSI004.ranking(functional_terms, terms_df)
-    except Exception as e:
-        ranking_df = pd.DataFrame(
-            columns=["X", "filename", "sum_functional_terms", "sum_terms", "result"]
-        )
-        logger.warning(str(e))
-    execution_logger.log_end("SCHATSI_ranking")
-
-    execution_logger = ExcutionLogger()
-    execution_logger.start()
-    terms_df = pd.DataFrame(output_terms, columns=["filename", "term", "term count"])
-    logger.info("Saving output files...", end="", flush=True)
-    outputs = [
-        ["schatsi_data_cleansing.csv", datacleansing_df],
-        [
-            "schatsi_references.csv",
-            pd.DataFrame(
-                output_references, columns=["filename", "raw reference string"]
-            ),
-        ],
-        ["schatsi_ranking.csv", ranking_df],
-        ["schatsi_terms.csv", terms_df],
-        [
-            "schatsi_included.csv",
-            pd.DataFrame(
-                output_included, columns=["filename", "type", "included", "excluded"]
-            ),
-        ],
-    ]
-    for output in outputs:
-        output[1].to_csv(
-            r"{}/{}".format(SCHATSI_OUTPUT_FOLDER, output[0]),
-            mode="wb",
-            encoding="utf-8",
-            sep=";",
-            index=False,
-        )
-
-    shutil.copy(
-        SCHATSI_FUNCTIONAL_TERMS,
-        os.path.join(SCHATSI_OUTPUT_FOLDER, "functional_terms.csv"),
-    )
-    shutil.copy(
-        SCHATSI_NEGATIVE_TERMS,
-        os.path.join(SCHATSI_OUTPUT_FOLDER, "negative_terms.csv"),
-    )
-
-    programm_execution_logger.log_end("whole Program")
-    logger.info("done")
-
-
-text_cleaner = TextCleaner()
-
-def process_file(file_path: Union(str,Path)):
-    text: str = file_reader.read(file_path)
-    monogram : List[str] = text_cleaner.clean(text, True)
-    bigram: List[str] = list(nltk.bigrams(monogram))
-    bigram_filtered, bigram_number = SCHATSI004.bigram_filtering(bigram)
-    trigram: List[str] = list(nltk.trigrams(monogram))
-    trigram_filtered, trigram_number = SCHATSI004.trigram_filtering(trigram)
-
-
-def process_input():
-    results = []
-    output_included = []
-
     for path, subdirs, files in os.walk(SCHATSI_INPUT_FOLDER):
-        for filename in files:
+        for filename in tqdm(files):
             file_path = os.path.join(path, filename)
-            try:
-                text = file_reader.read(file_path)
-            except Exception as e:
-                datatype = "unreadable file"
-                row = [filename, datatype, "__", "X"]
-                logger.warning(str(e))
+            doc: Document = file_reader.read(file_path)
+            if doc:
+                print(doc.title)
+                text, references = split_references_and_content(doc)
+                terms_df = create_terms(text)
+                terms_df["filename"] = filename
+                if terms_df is not None and not terms_df.empty:
+                    create_update_csv("schatsi_terms.csv", terms_df)
+                    ranking = ranker.rank(terms_df)
+                    ranking_df = pd.DataFrame([ranking])
+                    create_update_csv("schatsi_ranking.csv", ranking_df)
+                    
+                word_count_text = len(nltk.word_tokenize(text))
+                if references:
+                    word_count_reference = len(nltk.word_tokenize(references))
+                else:
+                    references = None
+                    word_count_reference = None
+
+                paper_metadata = pd.DataFrame(
+                    [
+                        create_metadata(
+                            doc,
+                            filename,
+                            text,
+                            word_count_text,
+                            references,
+                            word_count_reference,
+                            True,
+                        )
+                    ]
+                )
 
             else:
-                filename_lower = filename.lower()
-                if filename_lower.endswith(".pdf"):
-                    datatype = "pdf"
-                    # All files that are successfully read in where the type is 'pdf' will be used in the next steps
-                    text, references = SCHATSI003.split_references_and_content(text)
-                    results.append([filename, text, references, datatype])
+                paper_metadata = pd.DataFrame(
+                    [create_metadata(doc, filename, None, None, None, None, False)]
+                )
 
-                row = [filename, datatype, "X", "__"]
+            create_update_csv("paper_metadata.csv", paper_metadata)
 
-            output_included.append(row)
 
-    text_df = pd.DataFrame(
-        results, columns=["filename", "text_only", "reference text", "type"]
+def create_metadata(
+    doc: Document,
+    filename: str,
+    text: str,
+    word_count_text: int,
+    references: str,
+    word_count_reference: int,
+    include: bool,
+) -> None:
+    return {
+        "filename": filename,
+        "file_type": doc.file_type if doc else None,
+        "titel": doc.title if doc else None,
+        "toc": doc.toc if doc else None,
+        "text": text,
+        "word_count_text": word_count_text,
+        "references": references,
+        "word_count_reference": word_count_reference,
+        "include": include,
+    }
+
+
+def create_update_csv(filename, df):
+    path = os.path.join(SCHATSI_OUTPUT_FOLDER, filename)
+    if not os.path.isfile(path):
+        df.to_csv(path, index=False)
+    else:
+        df.to_csv(path, mode="a", header=False, index=False)
+
+
+def split_references_and_content(doc: Document):
+    low_string = doc.raw_text.lower()
+
+    try:
+        last_time_reference = low_string.rindex("\nreference")
+    except:
+        return low_string, None
+
+    low_string_without_references = low_string[0:last_time_reference]
+    references = low_string[last_time_reference:]
+    return low_string_without_references, references
+
+def create_terms(text: str):
+    monogram: List[str] = text_cleaner.clean(text, True)
+    mono_counts = collections.Counter(monogram)
+    bigram: List[str] = list(nltk.bigrams(monogram))
+    bigram_counts = collections.Counter(bigram)
+    trigram: List[str] = list(nltk.trigrams(monogram))
+    trigram_counts = collections.Counter(trigram)
+
+    joined_bigram = [" ".join(x) for x in bigram_counts.keys()]
+    joined_trigram = [" ".join(x) for x in trigram_counts.keys()]
+
+    output_terms = (
+        list(zip(mono_counts.keys(), mono_counts.values()))
+        + list(zip(joined_trigram, trigram_counts.values()))
+        + list(zip(joined_bigram, bigram_counts.values()))
     )
-    return text_df, output_included
-
+    terms_df = pd.DataFrame(output_terms, columns=["term", "term count"])
+    return terms_df
 
 if __name__ == "__main__":
     main()
