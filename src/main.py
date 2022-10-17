@@ -4,7 +4,6 @@ from typing import List, Tuple
 from dask import compute, delayed
 import pandas as pd
 from models.document import Document
-from models.metadata import Metadata
 from models.ranking import Ranking
 from processor.ngram_processor import NgramProcessor
 from processor.ranker import Ranker
@@ -42,12 +41,12 @@ def main_dask():
     
     results = compute(*results)
         
-    for terms_df, ranking, paper_metadata in results:
+    for terms_df, ranking, doc in results:
         if terms_df is not None and not terms_df.empty:
             create_update_csv("schatsi_terms.csv", terms_df)
         if ranking:
             create_update_csv("schatsi_ranking.csv", pd.DataFrame([ranking.dict()]))
-        create_update_csv("paper_metadata.csv", pd.DataFrame([paper_metadata.dict()]))
+        create_update_csv("documents.csv", pd.DataFrame([doc.dict()]))
         
 
 def process_file_dask(file_path: Path):
@@ -65,7 +64,7 @@ def process_file_dask(file_path: Path):
         else:
             ranking = None
 
-        paper_metadata: Metadata = create_metadata(
+        doc = enrich_metadata(
             doc,
             filename,
             text,
@@ -74,11 +73,11 @@ def process_file_dask(file_path: Path):
         )
 
     else:
-        paper_metadata: Metadata = create_metadata(doc, filename, None, None, False)
+        doc = enrich_metadata(doc, filename, None, None, False)
         terms_df = None
         ranking = None
 
-    return terms_df, ranking, paper_metadata
+    return terms_df, ranking, doc
 
 
 def process_file(file_path: Path):
@@ -95,7 +94,7 @@ def process_file(file_path: Path):
             ranking: Ranking = ranker.rank(terms_df)
             create_update_csv("schatsi_ranking.csv", pd.DataFrame([ranking.dict()]))
 
-        paper_metadata: Metadata = create_metadata(
+        doc = enrich_metadata(
             doc,
             filename,
             text,
@@ -104,18 +103,18 @@ def process_file(file_path: Path):
         )
 
     else:
-        paper_metadata: Metadata = create_metadata(doc, filename, None, None, False)
+        doc = enrich_metadata(doc, filename, None, None, False)
 
-    create_update_csv("paper_metadata.csv", pd.DataFrame([paper_metadata.dict()]))
+    create_update_csv("documents.csv", pd.DataFrame([doc.dict()]))
 
 
-def create_metadata(
+def enrich_metadata(
     doc: Document,
     filename: str,
     text: str,
     references: str,
     include: bool,
-) -> Metadata:
+) -> Document:
     if text:
         word_count_text: int = len(nltk.word_tokenize(text))
     else:
@@ -126,17 +125,12 @@ def create_metadata(
     else:
         word_count_reference = None
 
-    return Metadata(
-        filename=filename,
-        file_type=doc.file_type if doc else None,
-        titel=doc.title if doc else None,
-        toc=doc.toc if doc else None,
-        text=text,
-        word_count_text=word_count_text,
-        references=references,
-        word_count_reference=word_count_reference,
-        include=include,
-    )
+    doc.filename = filename
+    doc.include = include
+    doc.word_count_raw_text = word_count_text
+    doc.word_count_reference = word_count_reference
+    
+    return doc
 
 
 def create_update_csv(filename: str, df: pd.DataFrame) -> None:
@@ -181,4 +175,5 @@ def create_terms(text: str) -> pd.DataFrame:
 
 if __name__ == "__main__":
     main_dask()
+    
     

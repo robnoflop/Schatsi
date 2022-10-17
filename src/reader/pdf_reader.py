@@ -9,7 +9,6 @@ from reader.reader_type import ReaderType
 import fitz
 
 
-
 class PdfReader(BaseReader):
     
     type = ReaderType.PDF
