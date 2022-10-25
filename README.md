@@ -5,11 +5,11 @@
 
 ## Getting Started
 
-pip install poetry
-poetry install
+pip install poetry  
+poetry install  
 
 
 
-poetry build
-poetry config pypi-token.pypi <token>
-poetry publish
+poetry build  
+poetry config pypi-token.pypi <token>  
+poetry publish  
