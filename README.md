@@ -4,7 +4,7 @@
 
 
 ## Getting Started
-
+https://python-poetry.org/
 pip install poetry  
 poetry install  
 
