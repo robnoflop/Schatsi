@@ -3,16 +3,14 @@
 from asyncio.log import logger
 from pathlib import Path
 from typing import Union
-from models.document import Document
-from reader.base_reader import BaseReader
-from reader.pdf_reader import PdfReader
+from schatsi.models.document import Document
+from schatsi.reader.base_reader import BaseReader
+from schatsi.reader.pdf_reader import PdfReader
 
-from reader.reader_type import ReaderType
+from schatsi.reader.reader_type import ReaderType
 
 
 class ReaderFacade:
-
-    
     reader = {
         ReaderType.PDF: PdfReader()
     }
@@ -36,6 +34,7 @@ class ReaderFacade:
     
     def read(self, file_path: Union[str, Path]) -> Document|None:
         reader_type = self.__get_reader_type_from_path(file_path)
+        print(file_path, reader_type)
         if reader_type:
             reader = self.__get_reader_from_type(reader_type)
             return reader.read(file_path)          

@@ -1,6 +1,6 @@
 import pandas as pd
 
-from models.ranking import Ranking
+from schatsi.models.ranking import Ranking
 
 
 class Ranker:

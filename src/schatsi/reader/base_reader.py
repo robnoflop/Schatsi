@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 from typing import Union
 from pathlib import Path
-from models.document import Document
+    
+from schatsi.models.document import Document
 
-from reader.reader_type import ReaderType
+from schatsi.reader.reader_type import ReaderType
 
 
 class BaseReader(ABC):
