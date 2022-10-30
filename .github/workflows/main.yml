@@ -1,0 +1,7 @@
+- name: Release Poetry Python Project
+  # You may pin to the exact commit or the version.
+  # uses: bjoluc/semantic-release-config-poetry@60963996443c6b18bb8afddd2cd5618dcbf3f4de
+  uses: bjoluc/semantic-release-config-poetry@v1.0.0
+  with:
+    # The repository to publish the package to
+    repository: # optional, default is https://upload.pypi.org/legacy/
