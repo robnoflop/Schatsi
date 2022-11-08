@@ -24,6 +24,11 @@ black = "^22.10.0"
 mypy = "^0.982"
 snakeviz="^2.1.1"
 
+
+[tool.poetry.group.ui.dependencies]
+streamlit = "^1.14.0"
+plotly = "^5.11.0"
+
 [tool.poetry.scripts]
 schatsi = 'schatsi.cli:cli'
 
