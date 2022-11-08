@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import List
 import pandas as pd
 from tqdm import tqdm
 
@@ -23,7 +24,6 @@ class SingleJob(BaseJob):
     def _process_file(self, file_path: Path):
         filename = file_path.stem
         doc: Document = self.file_reader.read(file_path)
-        print(doc)
         if doc:
             text: str
             references: str
@@ -32,9 +32,9 @@ class SingleJob(BaseJob):
             terms_df["filename"] = filename
             if terms_df is not None and not terms_df.empty:
                 self._create_update_csv("schatsi_terms.csv", terms_df)
-                ranking: Ranking = self.ranker.rank(terms_df)
+                rankings: List[Ranking] = self.ranker.rank(terms_df, [self.text_cleaner.stemmer.stem])
                 self._create_update_csv(
-                    "schatsi_ranking.csv", pd.DataFrame([ranking.dict()])
+                    "schatsi_ranking.csv", pd.DataFrame([x.dict() for x in rankings])
                 )
 
             doc = self._enrich_metadata(

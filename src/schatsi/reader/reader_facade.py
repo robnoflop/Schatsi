@@ -34,7 +34,6 @@ class ReaderFacade:
     
     def read(self, file_path: Union[str, Path]) -> Document|None:
         reader_type = self.__get_reader_type_from_path(file_path)
-        print(file_path, reader_type)
         if reader_type:
             reader = self.__get_reader_from_type(reader_type)
             return reader.read(file_path)          
