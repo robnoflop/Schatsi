@@ -44,7 +44,7 @@ class ParallelJob(BaseJob):
             text: str
             references: str
             text, references = self._split_references_and_content(doc)
-            terms_df: pd.DataFrame = self._create_terms(text, [self.text_cleaner.stemmer.stem])
+            terms_df: pd.DataFrame = self._create_terms(text)
             terms_df["filename"] = filename
 
             if terms_df is not None and not terms_df.empty:
