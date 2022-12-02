@@ -9,7 +9,7 @@ pip install poetry
 poetry install  
 
 
-### build Package
+### build and publish Package
 poetry build  
 poetry config pypi-token.pypi <token>  
 poetry publish  
