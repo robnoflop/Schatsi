@@ -46,11 +46,9 @@ jobs:
       #----------------------------------------------
       - name: Install project
         run: poetry install --no-interaction
-      #----------------------------------------------
-      #              run test suite
-      #----------------------------------------------
-      - name: Run tests
-        run: |
-          source .venv/bin/activate
-          pytest tests/
-          coverage report
+        
+      - name: build project
+        run: poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
+        
+      - name: publish
+        run: poetry publish
