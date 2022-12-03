@@ -48,7 +48,11 @@ jobs:
         run: poetry install --no-interaction
         
       - name: version
-        run: poetry version patch
+        run: | 
+          poetry version patch
+          git add pyproject.toml
+          git commit -m "bump up version from workflow"
+          git push
       
       - name: build
         run: poetry build
