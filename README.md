@@ -7,9 +7,3 @@
 https://python-poetry.org/
 pip install poetry  
 poetry install  
-
-
-### build and publish Package
-poetry build  
-poetry config pypi-token.pypi <token>  
-poetry publish  
