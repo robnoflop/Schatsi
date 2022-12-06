@@ -12,12 +12,19 @@ from . import BaseJob
 
 
 class ParallelJob(BaseJob):
+    """_summary_
+
+    Args:
+        BaseJob (_type_): _description_
+    """
     def __init__(
         self, input_path, output_path, functional_terms, negative_terms
     ) -> None:
         super().__init__(input_path, output_path, functional_terms, negative_terms)
 
     def process(self):
+        """_summary_
+        """
         client = Client(threads_per_worker=1, n_workers=6)
         results = []
         for path, subdirs, files in os.walk(self.input_path):
@@ -44,7 +51,7 @@ class ParallelJob(BaseJob):
             text: str
             references: str
             text, references = self._split_references_and_content(doc)
-            terms_df: pd.DataFrame = self._create_terms(text, [self.text_cleaner.stemmer.stem])
+            terms_df: pd.DataFrame = self._create_terms(text)
             terms_df["filename"] = filename
 
             if terms_df is not None and not terms_df.empty:
