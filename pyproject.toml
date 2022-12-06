@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "schatsi"
-version = "0.1.15"
+version = "0.1.16"
 description = ""
 authors = ["robnoflop <info@robertkasseck.de>"]
 readme = "README.md"
