@@ -12,12 +12,19 @@ from . import BaseJob
 
 
 class ParallelJob(BaseJob):
+    """_summary_
+
+    Args:
+        BaseJob (_type_): _description_
+    """
     def __init__(
         self, input_path, output_path, functional_terms, negative_terms
     ) -> None:
         super().__init__(input_path, output_path, functional_terms, negative_terms)
 
     def process(self):
+        """_summary_
+        """
         client = Client(threads_per_worker=1, n_workers=6)
         results = []
         for path, subdirs, files in os.walk(self.input_path):

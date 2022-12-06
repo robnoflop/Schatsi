@@ -29,6 +29,17 @@ snakeviz="^2.1.1"
 streamlit = "^1.14.0"
 plotly = "^5.11.0"
 
+
+[tool.poetry.group.doc.dependencies]
+sphinx = "^5.3.0"
+autodoc = "^0.5.0"
+sphinx-autobuild = "^2021.3.14"
+sphinx-rtd-theme = "^1.1.1"
+rstcheck = "^6.1.1"
+graphviz = "^0.20.1"
+pydot = "^1.4.2"
+coverage = "^6.5.0"
+
 [tool.poetry.scripts]
 schatsi = 'schatsi.cli:cli'
 

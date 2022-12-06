@@ -10,12 +10,19 @@ from . import BaseJob
 
 
 class SingleJob(BaseJob):
+    """_summary_
+
+    Args:
+        BaseJob (_type_): _description_
+    """
     def __init__(
         self, input_path, output_path, functional_terms, negative_terms
     ) -> None:
         super().__init__(input_path, output_path, functional_terms, negative_terms)
 
     def process(self):
+        """_summary_
+        """
         for path, subdirs, files in os.walk(self.input_path):
             for filename in tqdm(files):
                 file_path = Path(path) / filename

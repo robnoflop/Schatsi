@@ -14,9 +14,22 @@ from schatsi.reader.reader_facade import ReaderFacade
 
 
 class BaseJob(ABC):
+    """_summary_
+
+    Args:
+        ABC (_type_): _description_
+    """
     def __init__(
         self, input_path, output_path, functional_terms, negative_terms
     ) -> None:
+        """_summary_
+
+        Args:
+            input_path (_type_): _description_
+            output_path (_type_): _description_
+            functional_terms (_type_): _description_
+            negative_terms (_type_): _description_
+        """
         self.input_path = input_path
         self.output_path = output_path
         self.negative_terms = negative_terms
@@ -28,6 +41,8 @@ class BaseJob(ABC):
         
     @abstractmethod
     def process(self):
+        """_summary_
+        """
         pass
 
     def _enrich_metadata(
