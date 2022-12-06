@@ -50,9 +50,11 @@ jobs:
       - name: version
         run: | 
           poetry version patch
+          poetry export --only doc --without-hashes --format requirements.txt --output docs/requirements.txt
           git config --global user.name "BuildPipeline"
           git config --global user.email "username@users.noreply.github.com"
           git add pyproject.toml
+          git add docs/requirements.txt
           git commit -m "bump up version from workflow"
           git push
       
