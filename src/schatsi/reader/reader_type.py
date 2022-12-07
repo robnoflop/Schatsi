@@ -1,4 +1,3 @@
-
 from enum import Enum
 
 
@@ -8,4 +7,6 @@ class ReaderType(Enum):
     Args:
         Enum (_type_): _description_
     """
+
     PDF = 1
+    DOCX = 2
