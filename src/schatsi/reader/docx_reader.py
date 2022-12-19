@@ -34,11 +34,10 @@ class DocxReader(BaseReader):
         out = doc.text
 
         return Document(
-            filename=file_path.stem,
+            filename=Path(file_path).stem,
             raw_text=out,
             file_type=str(type),
-            title=doc.metadata["title"],
-            toc=doc.get_toc(),
-            author=doc.metadata["author"],
-            keywords=doc.metadata["keywords"],
+            title=doc.core_properties["title"],
+            author=doc.core_properties["creator"],
+            keywords=doc.core_properties["keywords"]
         )
