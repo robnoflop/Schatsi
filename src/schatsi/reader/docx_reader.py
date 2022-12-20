@@ -1,7 +1,4 @@
-from importlib.metadata import metadata
 from pathlib import Path
-from typing import Union
-from weakref import ref
 from schatsi.models.document import Document
 from schatsi.reader.base_reader import BaseReader
 from schatsi.reader.reader_type import ReaderType
