@@ -35,6 +35,5 @@ class DocxReader(BaseReader):
             raw_text=out,
             file_type=str(type),
             title=doc.core_properties["title"],
-            author=doc.core_properties["creator"],
-            keywords=doc.core_properties["keywords"]
+            author=doc.core_properties["creator"]
         )
