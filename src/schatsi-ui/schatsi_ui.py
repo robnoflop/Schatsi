@@ -30,6 +30,7 @@ class Plotter():
     def create_plot(self):
         df = pd.read_csv(OUTPUT_PATH + "\schatsi_ranking.csv")
         df = df.drop_duplicates()
+        df.filename = "file_" + df.filename
 
         fig = px.bar(df, x="rank", y="filename", color='cluster', orientation='h')
         fig.update_layout(height=15*len(df.filename.unique()))

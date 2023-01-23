@@ -1,5 +1,7 @@
 import nltk
 
+nltk.download("punkt")
+nltk.download('stopwords')
 
 from schatsi.jobs import *
 
