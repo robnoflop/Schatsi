@@ -24,6 +24,7 @@ isort = "^5.10.1"
 black = "^22.10.0"
 mypy = "^0.982"
 snakeviz="^2.1.1"
+pre-commit = "^3.0.4"
 
 
 [tool.poetry.group.ui.dependencies]
