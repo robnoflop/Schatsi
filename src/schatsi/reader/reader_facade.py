@@ -34,6 +34,10 @@ class ReaderFacade:
             return ReaderType.PDF
         elif file_type.lower() == ".docx":
             return ReaderType.DOCX
+        elif file_type.lower() == ".xls":
+            return ReaderType.XLS
+        elif file_type.lower() == ".xlsx":
+            return ReaderType.XLSX
         else:
             logger.warning(f"Unknown file type {file_type} found.")
             return None

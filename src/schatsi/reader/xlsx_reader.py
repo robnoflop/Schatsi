@@ -5,20 +5,20 @@ from schatsi.reader.reader_type import ReaderType
 from docx2python import docx2python
 
 
-class DocxReader(BaseReader):
+class XlsxReader(BaseReader):
     """Reader impelementation to read Docx files.
 
     Args:
         BaseReader (_type_): The BaseReader.
     """
 
-    type = ReaderType.DOCX
+    type = ReaderType.XLSX
 
     def __init__(self) -> None:
         super().__init__()
 
     def read(self, file_path: Path) -> Document:
-        """Reads the given Docx file an tries to extract alle metadata to completeat
+        """Reads the given Xlsx file an tries to extract alle metadata to completeat
 
         Args:
             file_path (Union[str, Path]): The file path to Docx file.
