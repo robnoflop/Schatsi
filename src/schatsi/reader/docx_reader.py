@@ -18,7 +18,7 @@ class DocxReader(BaseReader):
         super().__init__()
 
     def read(self, file_path: Path) -> Document:
-        """Reads the given Docx file an trys to extract alle metadata to completeat
+        """Reads the given Docx file an tries to extract all metadata to complete it.
 
         Args:
             file_path (Union[str, Path]): The file path to Docx file.
@@ -31,7 +31,7 @@ class DocxReader(BaseReader):
         out = doc.text
 
         return Document(
-            filename=Path(file_path).stem,
+            filename=file_path.stem,
             raw_text=out,
             file_type=str(type),
             title=doc.core_properties["title"],
