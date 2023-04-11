@@ -5,6 +5,8 @@ from schatsi.models.document import Document
 from schatsi.reader.base_reader import BaseReader
 from schatsi.reader.pdf_reader import PdfReader
 from schatsi.reader.docx_reader import DocxReader
+from schatsi.reader.xls_reader import XlsReader
+from schatsi.reader.xlsx_reader import XlsxReader
 
 from schatsi.reader.reader_type import ReaderType
 
@@ -20,7 +22,9 @@ class ReaderFacade:
     """
     reader = {
         ReaderType.PDF: PdfReader(),
-        ReaderType.DOCX: DocxReader()
+        ReaderType.DOCX: DocxReader(),
+        ReaderType.XLS: XlsReader(),
+        ReaderType.XLSX:  XlsxReader()
     }
     
     def __init__(self) -> None:
