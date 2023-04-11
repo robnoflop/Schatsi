@@ -26,7 +26,7 @@ Windows
 
 ```shell
 cd docs
-sphinx-apidoc -lfM -d 0 -o drg_analytic/ ../src/drg_analytic
+sphinx-apidoc -lfM -d 0 -o schatsi/ ../src/schatsi
 .\make.bat html
 ```
 
@@ -34,6 +34,6 @@ Mac/Linux
 
 ```shell
 cd docs
-sphinx-apidoc -lfM -d 0 -o drg_analytic/ ../src/drg_analytic
+sphinx-apidoc -lfM -d 0 -o schatsi/ ../src/schatsi
 make html
 ```
