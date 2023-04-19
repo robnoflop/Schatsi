@@ -12,3 +12,4 @@ class ReaderType(Enum):
     DOCX = 2
     XLS = 3
     XLSX = 4
+    DOC = 5
