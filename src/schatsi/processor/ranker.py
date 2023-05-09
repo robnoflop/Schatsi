@@ -40,6 +40,8 @@ class Ranker:
         terms_df = self.functional_terms.join(
             terms_df.set_index("term"), on="term", how="inner"
         )
+        terms_df.to_csv('schatsi_term_distribution.csv')
+        
         rankings: List[Ranking] = []
         for k, g in terms_df.groupby(by="cluster"):
             sum_functional_terms = g["term count"].sum()
