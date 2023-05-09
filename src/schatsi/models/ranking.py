@@ -10,7 +10,6 @@ class Ranking(BaseModel):
     """
 
     filename: str
-    term: str
     sum_functional_terms: int
     sum_terms: int
     cluster: Union[None, str]
