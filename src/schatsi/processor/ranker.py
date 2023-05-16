@@ -1,7 +1,7 @@
 from typing import Callable, List
 import pandas as pd
 from pyparsing import condition_as_parse_action
-
+from pathlib import Path
 from schatsi.models.ranking import Ranking
 
 
@@ -17,7 +17,8 @@ class Ranker:
         self.functional_terms = pd.read_csv(path_functional_terms)
 
     def rank(
-        self, terms_df: pd.DataFrame, condition: List[Callable] = None
+        self, terms_df: pd.DataFrame, condition: List[Callable] = None,
+        output_path: str
     ) -> List[Ranking]:
         """_summary_
 
@@ -40,7 +41,8 @@ class Ranker:
         terms_df = self.functional_terms.join(
             terms_df.set_index("term"), on="term", how="inner"
         )
-        terms_df.to_csv('schatsi_term_distribution.csv')
+        term_distr_path = Path(output_path, 'schatsi_term_distribution.csv')
+        terms_df.to_csv(term_distr_path)
         
         rankings: List[Ranking] = []
         for k, g in terms_df.groupby(by="cluster"):
