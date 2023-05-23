@@ -8,7 +8,8 @@ from schatsi.models.ranking import Ranking
 class Ranker:
     """_summary_
     """
-    def __init__(self, path_functional_terms: str):
+    def __init__(self, path_functional_terms: str,
+                 output_path: str):
         """_summary_
 
         Args:
@@ -17,8 +18,7 @@ class Ranker:
         self.functional_terms = pd.read_csv(path_functional_terms)
 
     def rank(
-        self, terms_df: pd.DataFrame, condition: List[Callable] = None,
-        output_path: str
+        self, terms_df: pd.DataFrame, condition: List[Callable] = None
     ) -> List[Ranking]:
         """_summary_
 
