@@ -8,8 +8,7 @@ from schatsi.models.ranking import Ranking
 class Ranker:
     """_summary_
     """
-    def __init__(self, path_functional_terms: str,
-                 output_path: str):
+    def __init__(self, path_functional_terms: str):
         """_summary_
 
         Args:
@@ -41,8 +40,6 @@ class Ranker:
         terms_df = self.functional_terms.join(
             terms_df.set_index("term"), on="term", how="inner"
         )
-        term_distr_path = Path(output_path, 'schatsi_term_distribution.csv')
-        terms_df.to_csv(term_distr_path)
         
         rankings: List[Ranking] = []
         for k, g in terms_df.groupby(by="cluster"):
