@@ -37,3 +37,21 @@ cd docs
 sphinx-apidoc -lfM -d 0 -o schatsi/ ../src/schatsi
 make html
 ```
+
+## Project Structure
+```
+├── data
+│   ├── input
+│   ├── metadata
+│   └── output
+├── docs
+│   └── schatsi
+└── src
+    ├── schatsi
+    │   ├── jobs
+    │   ├── models
+    │   ├── processor
+    │   └── reader
+    └── schatsi-ui
+        └── components
+``````
