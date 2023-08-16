@@ -8,9 +8,9 @@ https://python-poetry.org/
 ```
 pip install poetry
 poetry lock
-.venv\Scripts\activate
 poetry config virtualenvs.in-project true
 poetry install
+poetry shell
 ```
 
 Generate documentation
