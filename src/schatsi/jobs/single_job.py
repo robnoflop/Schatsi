@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 from schatsi.models.document import Document
 from schatsi.models.ranking import Ranking
+
 from . import BaseJob
 
 
@@ -20,9 +21,14 @@ class SingleJob(BaseJob):
     ) -> None:
         super().__init__(input_path, output_path, functional_terms, negative_terms)
 
+    # process function to be called from run.py
     def process(self):
         """_summary_
         """
+        self._iterate_files()
+
+    # iterate over files in input_path
+    def _iterate_files(self):
         for path, subdirs, files in os.walk(self.input_path):
             for filename in tqdm(files):
                 file_path = Path(path) / filename
