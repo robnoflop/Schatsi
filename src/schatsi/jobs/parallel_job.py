@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
-
 import pandas as pd
 from dask import compute, delayed
 from distributed import Client
+from tqdm import tqdm
+
 from schatsi.models.document import Document
 from schatsi.models.ranking import Ranking
-from tqdm import tqdm
 
 from . import BaseJob
 
@@ -17,56 +17,71 @@ class ParallelJob(BaseJob):
     Args:
         BaseJob (_type_): _description_
     """
+
     def __init__(
         self, input_path, output_path, functional_terms, negative_terms
     ) -> None:
         super().__init__(input_path, output_path, functional_terms, negative_terms)
 
     def process(self):
-        """_summary_
-        """
+        """_summary_"""
+        self._setup_dask_client()
+        results = self._process_files_parallel()
+        self._process_results(results)
+
+    # seting up client to do parallel processing
+    def _setup_dask_client(self):
+        """_summary_"""
         client = Client(threads_per_worker=1, n_workers=6)
+        return client
+    
+    # parallel processing of files
+    def _process_files_parallel(self):
         results = []
         for path, subdirs, files in os.walk(self.input_path):
             for filename in tqdm(files, desc="Create Dask delayed"):
                 file_path = Path(path) / filename
                 results.append(delayed(self._process_file)(file_path))
-
         results = compute(*results)
-
-        for terms_df, rankings, doc in results:
-            if terms_df is not None and not terms_df.empty:
-                self._create_update_csv("schatsi_terms.csv", terms_df)
-            if rankings:
-                self._create_update_csv(
-                    "schatsi_ranking.csv", pd.DataFrame([x.dict() for x in rankings])
-                )
-            if doc:
-                self._create_update_csv("documents.csv", pd.DataFrame([doc.dict()]))
-
+        return results
+    
+    # processing a single file
     def _process_file(self, file_path: Path):
         filename = file_path.stem
-        doc: Document = self.file_reader.read(file_path)
+        doc, text, references = self._read_document(file_path)
+        terms_df, ranking, doc = self._process_document(doc, text, references, filename)
+        return terms_df, ranking, doc
+
+    #reading the content of a file     
+    def _read_document(self, file_path: Path):
+        doc = self.file_reader.read(file_path)
         if doc:
             text: str
             references: str
             text, references = self._split_references_and_content(doc)
-            terms_df: pd.DataFrame = self._create_terms(text)
+            return doc, text, references
+        return None, None, None
+
+    # processing the content of a file
+    def _process_document(self, doc, text, references, filename):
+        if doc:
+            terms_df = self._create_terms(text)
             terms_df["filename"] = filename
 
+            ranking: Ranking = self.ranker.rank(terms_df) if terms_df is not None and not terms_df.empty else None
+            
+            enriched_doc = self._enrich_metadata(doc, text, references)
+            return terms_df, ranking, enriched_doc
+        return None, None, None
+    
+    # processing the results of a file and ranking them
+    def _process_results(self, results):
+        for terms_df, ranking, doc in results:
             if terms_df is not None and not terms_df.empty:
-                ranking: Ranking = self.ranker.rank(terms_df)
-            else:
-                ranking = None
-
-            doc = self._enrich_metadata(
-                doc,
-                text,
-                references,
-            )
-
-        else:
-            terms_df = None
-            ranking = None
-
-        return terms_df, ranking, doc
+                self._create_update_csv("schatsi_terms.csv", terms_df)
+            if ranking is not None:
+                self._create_update_csv(
+                    "schatsi_ranking.csv", pd.DataFrame([x.dict() for x in ranking])
+                )
+            if doc is not None:
+                self._create_update_csv("documents.csv", pd.DataFrame([doc.dict()]))

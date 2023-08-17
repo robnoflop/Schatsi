@@ -8,9 +8,9 @@ https://python-poetry.org/
 ```
 pip install poetry
 poetry lock
-.venv\Scripts\activate
 poetry config virtualenvs.in-project true
 poetry install
+poetry shell
 ```
 
 Generate documentation
@@ -37,3 +37,21 @@ cd docs
 sphinx-apidoc -lfM -d 0 -o schatsi/ ../src/schatsi
 make html
 ```
+
+## Project Structure
+```
+├── data
+│   ├── input
+│   ├── metadata
+│   └── output
+├── docs
+│   └── schatsi
+└── src
+    ├── schatsi
+    │   ├── jobs
+    │   ├── models
+    │   ├── processor
+    │   └── reader
+    └── schatsi-ui
+        └── components
+``````
