@@ -11,9 +11,10 @@ from schatsi.jobs.parallel_job import ParallelJob
 from schatsi.jobs.single_job import SingleJob
 
 
-UPLOAD_PATH = r"C:\repos\Schatsi\data\input"
-OUTPUT_PATH = r"C:\repos\Schatsi\data\output"
-METADATA_PATH = r"C:\repos\Schatsi\data\metadata"
+
+UPLOAD_PATH = r"../../data/input"
+OUTPUT_PATH = r"../../data/output"
+METADATA_PATH = r"../../data/metadata"
 
 
 
@@ -28,7 +29,7 @@ class Plotter():
         self.plot_container = st.empty()
 
     def create_plot(self):
-        df = pd.read_csv(OUTPUT_PATH + "\schatsi_ranking.csv")
+        df = pd.read_csv(os.path.join(OUTPUT_PATH, "schatsi_ranking.csv"))
         df = df.drop_duplicates()
         df.filename = "file_" + df.filename
 
